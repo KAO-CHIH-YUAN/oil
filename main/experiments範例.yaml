@@ -1,0 +1,159 @@
+# 實驗結果儲存的 ROOT 目錄
+results_base_dir: 'OIL_PROJECT/result'
+# Excel 記錄檔的路徑 
+excel_log_path: 'OIL_PROJECT/result/experiment_log.xlsx'
+
+# 要執行的 Piepeline 實驗列表
+experiments:
+  # ===================================================================
+  # 參數設定說明：
+  # - experiment_name: 實驗名稱，會用來命名結果資料
+  # - mode: 執行模式，'train' 代表訓練 + 評估，'test' 代表只評估
+  # - run: 是否執行該實驗，True 代表執行，False 代表跳過 ( 可以不用打，預設True)
+  # - base_model: 設定Pretrained模型的路徑，如果是直接執行就是Pretrained的yolo11n-seg.pt，
+  #   如果是微調模式(只要用搜尋模式{{}}去指定訓練完的模型)，並且mode是'train'
+  # - dataset: 資料集設定，包括路徑、訓練/驗證/測試資料夾、類別數量和名稱
+  #   path: 資料集根目錄的路徑
+  #   train: 訓練資料夾的相對路徑 (可不用打，預設是 'images/train')
+  #   val: 驗證資料夾的相對路徑 ( 可不用打，預設是 'images/val')
+  #   test: 測試資料夾的相對路徑 ( 可不用打，預設是 'images/test')
+  #   nc: 類別數量 ( 可以不用打，預設是 1 )
+  #   names: 類別名稱列表 ( 可以不用打，預設是 ['oil'] )
+  # - epochs: 訓練的總輪數
+  # - imgsz: 訓練和評估的圖片尺寸
+  # - batch_size: 訓練時的批次大小
+  # - patience: 訓練時的耐心值，0 代表不使用早停 (Early Stopping)
+  # - eval_conf: 評估時的置信度閾值 ( 可以不用打，預設是 0.25)
+  # - eval_iou: 評估時的 NMS IoU 閾值 ( 可以不用打，預設是 0.6 )
+  # - post_tests: 測試設定，若無此設定，會按照 mode 執行評估，train仍會直接以dataset資料集進行評估
+  #   - test_name: 設定 測試名稱
+  #   - dataset: 使用的資料集
+  #   - reconstruction: 是否啟用重組評估，若不指定，預設為 False
+  #     enabled: 是否啟用重組評估 (True/False)
+  #     original_data_root: 原始資料集的ROOT目錄路徑，用於重組評估
+
+
+   # ===================================================================
+  # 實驗 1
+  # 最簡易設定概念
+  # ===================================================================
+  - experiment_name: 'yolo(11n-seg)_SAR(epoch800_P1024_O128_BGKeep0p)'
+    mode: 'train' # 執行訓練 + 評估
+    run: True
+    base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt'
+    dataset:
+      path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P1024_O128_BGKeep0p/SAR_2' # 相對於 data.yaml 的路徑
+    epochs: 800
+    imgsz: 1024
+    batch_size: 32
+    patience: 0 
+    post_tests:
+      # 第一個後續測試：自己 SAR 資料集上 重組評估
+      - test_name: 'eval_DV2-SAR_reconstruction'
+        dataset: 
+          path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P1024_O128_BGKeep0p/SAR_2' 
+        reconstruction:
+          enabled: True
+          original_data_root: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2'
+
+      # 第二個後續測試：用同一個模型，去測試不同的 Zenodo 資料集 
+      - test_name: 'eval_Zenodo_reconstruction'
+        dataset:
+          path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_patch/Patched_Data_P1024_O128_BGKeep0p/zenodo' 
+        reconstruction:
+          enabled: True
+          original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo'
+
+      # 第三個後續測試: 可以不重組評估，直接用資料集進行評估  
+      - test_name: 'eval_Zenodo_reconstruction'
+        dataset:
+          path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_patch/Patched_Data_P1024_O128_BGKeep0p/zenodo' 
+
+
+  # ===================================================================
+  # 實驗 1-1: 訓練模式 (train)
+  # 完整設定概念
+  # ===================================================================
+  - experiment_name: 'yolo(11n-seg)_SAR(epoch800_P1024_O128_BGKeep0p)'
+    mode: 'train' # 執行訓練 + 評估
+    run: True
+    base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt'
+    dataset:
+      path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P1024_O128_BGKeep0p/SAR_2' # 相對於 data.yaml 的路徑
+      train: 'images/train'
+      val: 'images/val'
+      test: 'images/test'
+      nc: 1
+      names: ['oil']
+    epochs: 800
+    imgsz: 1024
+    batch_size: 32
+    patience: 0 
+    eval_conf: 0.25
+    eval_iou: 0.6 
+    post_tests:
+      # 第一個後續測試：自己 SAR 資料集上 重組評估
+      - test_name: 'eval_DV2-SAR_reconstruction'
+        dataset: 
+          path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P1024_O128_BGKeep0p/SAR_2' 
+          train: 'images/train'
+          val: 'images/val'
+          test: 'images/test'
+          nc: 1
+          names: ['oil']
+        eval_conf: 0.1111
+        eval_iou: 0.555 
+        reconstruction:
+          enabled: True
+          original_data_root: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2'
+
+      # 第二個後續測試：用同一個模型，去測試不同的 Zenodo 資料集 
+      - test_name: 'eval_Zenodo_reconstruction'
+        dataset:
+          path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_patch/Patched_Data_P1024_O128_BGKeep0p/zenodo' 
+        reconstruction:
+          enabled: True
+          original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo'
+
+      # 第三個後續測試: 可以不重組評估，直接用資料集進行評估  
+      - test_name: 'eval_Zenodo_reconstruction'
+        dataset:
+          path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_patch/Patched_Data_P1024_O128_BGKeep0p/zenodo' 
+
+
+  # ===================================================================
+  # 實驗 1-2: 微調模式 (train)
+  # 接續實驗 1 的模型，在 SAR 資料集上進行微調 fine-tuning
+  # ===================================================================
+  - experiment_name: 'yolo(11n-seg)_SAR(epoch800_P1024_O128_BGKeep0p)_zenodo(epoch800)_imgsz1024'
+    mode: 'train'
+    run: True
+    base_model: '{{yolo(11n-seg)_SAR(epoch800_P1024_O128_BGKeep0p)}}/weights/best.pt' # 這裡使用實驗 1 的最佳模型作為基礎模型，就為微調
+    dataset:
+      path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo'
+    epochs: 800
+    imgsz: 1024
+    batch_size: 32
+    patience: 0 
+  
+
+
+  # ===================================================================
+  # 實驗 : 重新評估結果。
+  # ===================================================================
+  - experiment_name: 'yolo(11n-seg)_SAR(epoch800-P1024_O128_BGKeep0p)'
+    mode: 'test' 
+    base_model: '/home/yuan/OIL_PROJECT/result/20250702-171606_yolo(11n-seg)_SAR(epoch800-P1024_O128_BGKeep0p)/weights/best.pt' 
+    dataset:
+      path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P1024_O128_BGKeep0p/SAR_2' 
+    epochs: 800
+    imgsz: 1024
+    batch_size: 32
+    patience: 0 
+    post_tests:
+      - test_name: 'eval_DV2-SAR_reconstruction'
+        dataset: 
+          path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P1024_O128_BGKeep0p/SAR_2' 
+        reconstruction:
+          enabled: True
+          original_data_root: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2'

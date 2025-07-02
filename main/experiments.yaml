@@ -1,0 +1,801 @@
+# 實驗結果儲存的根目錄
+results_base_dir: 'OIL_PROJECT/result'
+# Excel 記錄檔的路徑 
+excel_log_path: 'OIL_PROJECT/result/experiment_log.xlsx'
+
+# 要執行的實驗列表
+experiments:
+  # # ===================================================================
+  # # 實驗 1-1: 訓練模式 (train)
+  # # 從頭開始訓練一個 Zenodo 分割模型
+  # # ===================================================================
+  # - experiment_name: 'yolo(11n-seg)_zenodo(vv-OnlyOil-epoch800)_imgsz1024'
+  #   mode: 'train' # 執行訓練 + 評估
+  #   run: True
+  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt'
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo' # 相對於 data.yaml 的路徑
+  #     train: 'images/train'
+  #     val: 'images/val'
+  #     test: 'images/test'
+  #     nc: 1
+  #     names: ['oil']
+  #   epochs: 800
+  #   imgsz: 1024
+  #   batch_size: 32
+  #   patience: 0 
+  #   eval_conf: 0.25
+  #   eval_iou: 0.6 # 設定驗證時的 NMS IoU
+
+  # # ===================================================================
+  # # 實驗 1-2: 微調模式 (train)
+  # # 接續實驗 1 的模型，在 SAR 資料集上進行微調
+  # # ===================================================================
+  # - experiment_name: 'yolo(11n-seg)_zenodo(vv-OnlyOil-epoch800)_SAR(epoch800-No_patch)_imgsz1024'
+  #   mode: 'train'
+  #   run: True
+  #   base_model: '{{yolo(11n-seg)_zenodo(vv-OnlyOil-epoch800)_imgsz1024}}/weights/best.pt'
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2'
+  #     train: 'images/train'
+  #     val: 'images/val'
+  #     test: 'images/test'
+  #     nc: 1
+  #     names: ['oil']
+  #   epochs: 800
+  #   imgsz: 1024
+  #   batch_size: 32
+  #   patience: 0 
+  #   eval_conf: 0.25
+  #   eval_iou: 0.6 # 設定驗證時的 NMS IoU
+
+  
+  # # ===================================================================
+  # # 實驗 2-1: 訓練模式 (train)
+  # # 從頭開始訓練一個 Zenodo 分割模型
+  # # ===================================================================
+  # - experiment_name: 'yolo(11n-seg)_zenodo(vv-OnlyOil-epoch800)_imgsz640'
+  #   mode: 'train' # 執行訓練 + 評估
+  #   run: True
+  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt'
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo' # 相對於 data.yaml 的路徑
+  #     train: 'images/train'
+  #     val: 'images/val'
+  #     test: 'images/test'
+  #     nc: 1
+  #     names: ['oil']
+  #   epochs: 800
+  #   imgsz: 640
+  #   batch_size: 32
+  #   patience: 0 
+  #   eval_conf: 0.25
+  #   eval_iou: 0.6 # 設定驗證時的 NMS IoU
+
+  # # ===================================================================
+  # # 實驗 2-2: 微調模式 (train)
+  # # 接續實驗 1 的模型，在 SAR 資料集上進行微調
+  # # ===================================================================
+  # - experiment_name: 'yolo(11n-seg)_zenodo(vv-OnlyOil-epoch800)_SAR(epoch800-No_patch)_imgsz640'
+  #   mode: 'train'
+  #   run: True
+  #   base_model: '{{yolo(11n-seg)_zenodo(vv-OnlyOil-epoch800)_imgsz640}}/weights/best.pt'
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2'
+  #     train: 'images/train'
+  #     val: 'images/val'
+  #     test: 'images/test'
+  #     nc: 1
+  #     names: ['oil']
+  #   epochs: 800
+  #   imgsz: 640
+  #   batch_size: 32
+  #   patience: 0 
+  #   eval_conf: 0.25
+  #   eval_iou: 0.6 # 設定驗證時的 NMS IoU
+
+
+
+
+
+  # # ===================================================================
+  # # 實驗 1: 訓練 SAR patch 1024 overlap 128 background keep 0%
+  # # ===================================================================
+  # - experiment_name: 'yolo(11n-seg)_SAR(epoch800-P1024_O128_BGKeep0p)'
+  #   mode: 'train' 
+  #   run: True
+  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P1024_O128_BGKeep0p/SAR_2' # 相對於 data.yaml 的路徑
+  #     train: 'images/train'
+  #     val: 'images/val'
+  #     test: 'images/test'
+  #     nc: 1
+  #     names: ['oil']
+  #   epochs: 800
+  #   imgsz: 1024
+  #   batch_size: 32
+  #   patience: 0 
+  #   eval_conf: 0.25
+  #   eval_iou: 0.6 # 設定驗證時的 NMS IoU
+
+  #   post_tests:
+  #     # 第一個後續測試：在它自己的 SAR 資料集上進行重組評估
+  #     - test_name: 'eval_SAR_reconstruction'
+  #       run: True
+  #       dataset:
+  #         path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P1024_O128_BGKeep0p/SAR_2' 
+  #         train: 'images/train'
+  #         val: 'images/val'
+  #         test: 'images/test'
+  #         nc: 1
+  #         names: ['oil']
+  #       reconstruction:
+  #         # 這個測試也可以有自己獨立的重組設定
+  #         enabled: True
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2'
+  #         overlay_min_conf: 0.25  # (可選) BBox 最小可信度
+  #         overlay_nms_iou: 0.6   # (可選) BBox NMS IoU 閾值
+  #         overlay_alpha: 0.2     # (可選) 分割圖層的不透明度 (0.0-1.0)
+      
+  #     # 第二個後續測試：用同一個模型，去測試一個完全不同的 Zenodo 資料集
+  #     - test_name: 'eval_zenodo_reconstruction'
+  #       run: True
+  #       dataset: # dataset 可以和父實驗相同，也可以不同
+  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_patch/Patched_Data_P1024_O128_BGKeep0p/zenodo'
+  #         train: 'images/train'
+  #         val: 'images/val'
+  #         test: 'images/test'
+  #         nc: 1
+  #         names: ['oil']
+  #       reconstruction:
+  #         enabled: True
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo'
+  #         overlay_min_conf: 0.25  # (可選) BBox 最小可信度
+  #         overlay_nms_iou: 0.6   # (可選) BBox NMS IoU 閾值
+  #         overlay_alpha: 0.2     # (可選) 分割圖層的不透明度 (0.0-1.0)
+
+      
+      
+  # # ===================================================================
+  # # 實驗 2: 訓練 SAR patch 256 overlap 128 background keep 0%
+  # # ===================================================================
+  # - experiment_name: 'yolo(11n-seg)_SAR(epoch800-P256_O128_BGKeep0p)'
+  #   mode: 'train' 
+  #   run: True
+  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P256_O128_BGKeep0p/SAR_2' # 相對於 data.yaml 的路徑
+  #     train: 'images/train'
+  #     val: 'images/val'
+  #     test: 'images/test'
+  #     nc: 1
+  #     names: ['oil']
+  #   epochs: 800
+  #   imgsz: 256
+  #   batch_size: 32
+  #   patience: 0 
+  #   eval_conf: 0.25
+  #   eval_iou: 0.6 # 設定驗證時的 NMS IoU
+
+  #   post_tests:
+  #     # 第一個後續測試：在它自己的 SAR 資料集上進行重組評估
+  #     - test_name: 'eval_SAR_reconstruction'
+  #       run: True
+  #       dataset:
+  #         path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P256_O128_BGKeep0p/SAR_2' 
+  #         train: 'images/train'
+  #         val: 'images/val'
+  #         test: 'images/test'
+  #         nc: 1
+  #         names: ['oil']
+  #       reconstruction:
+  #         # 這個測試也可以有自己獨立的重組設定
+  #         enabled: True
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2'
+  #         overlay_min_conf: 0.25  # (可選) BBox 最小可信度
+  #         overlay_nms_iou: 0.6   # (可選) BBox NMS IoU 閾值
+  #         overlay_alpha: 0.2     # (可選) 分割圖層的不透明度 (0.0-1.0)
+      
+  #     # 第二個後續測試：用同一個模型，去測試一個完全不同的 Zenodo 資料集
+  #     - test_name: 'eval_zenodo_reconstruction'
+  #       run: True
+  #       dataset: # dataset 可以和父實驗相同，也可以不同
+  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_patch/Patched_Data_P256_O128_BGKeep0p/zenodo'
+  #         train: 'images/train'
+  #         val: 'images/val'
+  #         test: 'images/test'
+  #         nc: 1
+  #         names: ['oil']
+  #       reconstruction:
+  #         enabled: True
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo'
+  #         overlay_min_conf: 0.25  # (可選) BBox 最小可信度
+  #         overlay_nms_iou: 0.6   # (可選) BBox NMS IoU 閾值
+  #         overlay_alpha: 0.2     # (可選) 分割圖層的不透明度 (0.0-1.0)
+
+
+
+  # # ===================================================================
+  # # 實驗 3-1: 訓練 SAR patch 640 overlap 128 background keep 0%
+  # # ===================================================================
+  # - experiment_name: 'yolo(11n-seg)_SAR(epoch800-P640_O128_BGKeep0p)'
+  #   mode: 'train' 
+  #   run: True
+  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P640_O128_BGKeep0p/SAR_2' # 相對於 data.yaml 的路徑
+  #     train: 'images/train'
+  #     val: 'images/val'
+  #     test: 'images/test'
+  #     nc: 1
+  #     names: ['oil']
+  #   epochs: 800
+  #   imgsz: 640
+  #   batch_size: 32
+  #   patience: 0 
+  #   eval_conf: 0.25
+  #   eval_iou: 0.6 # 設定驗證時的 NMS IoU
+
+  #   post_tests:
+  #     # 第一個後續測試：在它自己的 SAR 資料集上進行重組評估
+  #     - test_name: 'eval_SAR_reconstruction'
+  #       run: True
+  #       dataset:
+  #         path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P640_O128_BGKeep0p/SAR_2' 
+  #         train: 'images/train'
+  #         val: 'images/val'
+  #         test: 'images/test'
+  #         nc: 1
+  #         names: ['oil']
+  #       reconstruction:
+  #         # 這個測試也可以有自己獨立的重組設定
+  #         enabled: True
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2'
+  #         overlay_min_conf: 0.25  # (可選) BBox 最小可信度
+  #         overlay_nms_iou: 0.6   # (可選) BBox NMS IoU 閾值
+  #         overlay_alpha: 0.2     # (可選) 分割圖層的不透明度 (0.0-1.0)
+      
+  #     # 第二個後續測試：用同一個模型，去測試一個完全不同的 Zenodo 資料集
+  #     - test_name: 'eval_zenodo_reconstruction'
+  #       run: True
+  #       dataset: # dataset 可以和父實驗相同，也可以不同
+  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_patch/Patched_Data_P640_O128_BGKeep0p/zenodo'
+  #         train: 'images/train'
+  #         val: 'images/val'
+  #         test: 'images/test'
+  #         nc: 1
+  #         names: ['oil']
+  #       reconstruction:
+  #         enabled: True
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo'
+  #         overlay_min_conf: 0.25  # (可選) BBox 最小可信度
+  #         overlay_nms_iou: 0.6   # (可選) BBox NMS IoU 閾值
+  #         overlay_alpha: 0.2     # (可選) 分割圖層的不透明度 (0.0-1.0)
+
+
+
+
+  # # ===================================================================
+  # # 實驗 3-2: 訓練 SAR patch 640 overlap 128 background keep 10%
+  # # ===================================================================
+  # - experiment_name: 'yolo(11n-seg)_SAR(epoch800-P640_O128_BGKeep10p)'
+  #   mode: 'train' 
+  #   run: True
+  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P640_O128_BGKeep10p/SAR_2' # 相對於 data.yaml 的路徑
+  #     train: 'images/train'
+  #     val: 'images/val'
+  #     test: 'images/test'
+  #     nc: 1
+  #     names: ['oil']
+  #   epochs: 800
+  #   imgsz: 640
+  #   batch_size: 32
+  #   patience: 0 
+  #   eval_conf: 0.25
+  #   eval_iou: 0.6 # 設定驗證時的 NMS IoU
+
+  #   post_tests:
+  #     # 第一個後續測試：在它自己的 SAR 資料集上進行重組評估
+  #     - test_name: 'eval_SAR_reconstruction'
+  #       run: True
+  #       dataset:
+  #         path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P640_O128_BGKeep10p/SAR_2' 
+  #         train: 'images/train'
+  #         val: 'images/val'
+  #         test: 'images/test'
+  #         nc: 1
+  #         names: ['oil']
+  #       reconstruction:
+  #         # 這個測試也可以有自己獨立的重組設定
+  #         enabled: True
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2'
+  #         overlay_min_conf: 0.25  # (可選) BBox 最小可信度
+  #         overlay_nms_iou: 0.6   # (可選) BBox NMS IoU 閾值
+  #         overlay_alpha: 0.2     # (可選) 分割圖層的不透明度 (0.0-1.0)
+      
+  #     # 第二個後續測試：用同一個模型，去測試一個完全不同的 Zenodo 資料集
+  #     - test_name: 'eval_zenodo_reconstruction'
+  #       run: True
+  #       dataset: # dataset 可以和父實驗相同，也可以不同
+  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_patch/Patched_Data_P640_O128_BGKeep10p/zenodo'
+  #         train: 'images/train'
+  #         val: 'images/val'
+  #         test: 'images/test'
+  #         nc: 1
+  #         names: ['oil']
+  #       reconstruction:
+  #         enabled: True
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo'
+  #         overlay_min_conf: 0.25  # (可選) BBox 最小可信度
+  #         overlay_nms_iou: 0.6   # (可選) BBox NMS IoU 閾值
+  #         overlay_alpha: 0.2     # (可選) 分割圖層的不透明度 (0.0-1.0)
+
+
+
+  # # ===================================================================
+  # # 實驗 3-3: 訓練 SAR patch 640 overlap 128 background keep 20%
+  # # ===================================================================
+  # - experiment_name: 'yolo(11n-seg)_SAR(epoch800-P640_O128_BGKeep20p)'
+  #   mode: 'train' 
+  #   run: True
+  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P640_O128_BGKeep20p/SAR_2' # 相對於 data.yaml 的路徑
+  #     train: 'images/train'
+  #     val: 'images/val'
+  #     test: 'images/test'
+  #     nc: 1
+  #     names: ['oil']
+  #   epochs: 800
+  #   imgsz: 640
+  #   batch_size: 32
+  #   patience: 0 
+  #   eval_conf: 0.25
+  #   eval_iou: 0.6 # 設定驗證時的 NMS IoU
+
+  #   post_tests:
+  #     # 第一個後續測試：在它自己的 SAR 資料集上進行重組評估
+  #     - test_name: 'eval_SAR_reconstruction'
+  #       run: True
+  #       dataset:
+  #         path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P640_O128_BGKeep20p/SAR_2' 
+  #         train: 'images/train'
+  #         val: 'images/val'
+  #         test: 'images/test'
+  #         nc: 1
+  #         names: ['oil']
+  #       reconstruction:
+  #         # 這個測試也可以有自己獨立的重組設定
+  #         enabled: True
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2'
+  #         overlay_min_conf: 0.25  # (可選) BBox 最小可信度
+  #         overlay_nms_iou: 0.6   # (可選) BBox NMS IoU 閾值
+  #         overlay_alpha: 0.2     # (可選) 分割圖層的不透明度 (0.0-1.0)
+      
+  #     # 第二個後續測試：用同一個模型，去測試一個完全不同的 Zenodo 資料集
+  #     - test_name: 'eval_zenodo_reconstruction'
+  #       run: True
+  #       dataset: # dataset 可以和父實驗相同，也可以不同
+  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_patch/Patched_Data_P640_O128_BGKeep20p/zenodo'
+  #         train: 'images/train'
+  #         val: 'images/val'
+  #         test: 'images/test'
+  #         nc: 1
+  #         names: ['oil']
+  #       reconstruction:
+  #         enabled: True
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo'
+  #         overlay_min_conf: 0.25  # (可選) BBox 最小可信度
+  #         overlay_nms_iou: 0.6   # (可選) BBox NMS IoU 閾值
+  #         overlay_alpha: 0.2     # (可選) 分割圖層的不透明度 (0.0-1.0)
+
+
+
+  # # ===================================================================
+  # # 實驗 1: 訓練 SAR patch 1024 overlap 128 background keep 0%
+  # # ===================================================================
+  # - experiment_name: 'yolo(11n-seg)_SAR(epoch800-P1024_O128_BGKeep0p)'
+  #   mode: 'train' 
+  #   run: True
+  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P1024_O128_BGKeep0p/SAR_2' # 相對於 data.yaml 的路徑
+  #     train: 'images/train'
+  #     val: 'images/val'
+  #     test: 'images/test'
+  #     nc: 1
+  #     names: ['oil']
+  #   epochs: 800
+  #   imgsz: 1024
+  #   batch_size: 32
+  #   patience: 0 
+  #   eval_conf: 0.25
+  #   eval_iou: 0.6 # 設定驗證時的 NMS IoU
+
+  #   post_tests:
+  #     # 第一個後續測試：在它自己的 SAR 資料集上進行重組評估
+  #     - test_name: 'eval_SAR_reconstruction'
+  #       run: True
+  #       dataset:
+  #         path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P1024_O128_BGKeep0p/SAR_2' 
+  #         train: 'images/train'
+  #         val: 'images/val'
+  #         test: 'images/test'
+  #         nc: 1
+  #         names: ['oil']
+  #       reconstruction:
+  #         # 這個測試也可以有自己獨立的重組設定
+  #         enabled: True
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2'
+  #         overlay_min_conf: 0.25  # (可選) BBox 最小可信度
+  #         overlay_nms_iou: 0.6   # (可選) BBox NMS IoU 閾值
+  #         overlay_alpha: 0.2     # (可選) 分割圖層的不透明度 (0.0-1.0)
+      
+  #     # 第二個後續測試：用同一個模型，去測試一個完全不同的 Zenodo 資料集
+  #     - test_name: 'eval_zenodo_reconstruction'
+  #       run: True
+  #       dataset: # dataset 可以和父實驗相同，也可以不同
+  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_patch/Patched_Data_P1024_O128_BGKeep0p/zenodo'
+  #         train: 'images/train'
+  #         val: 'images/val'
+  #         test: 'images/test'
+  #         nc: 1
+  #         names: ['oil']
+  #       reconstruction:
+  #         enabled: True
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo'
+  #         overlay_min_conf: 0.25  # (可選) BBox 最小可信度
+  #         overlay_nms_iou: 0.6   # (可選) BBox NMS IoU 閾值
+  #         overlay_alpha: 0.2     # (可選) 分割圖層的不透明度 (0.0-1.0)
+
+      
+      
+  # # ===================================================================
+  # # 實驗 2: 訓練 SAR patch 256 overlap 128 background keep 0%
+  # # ===================================================================
+  # - experiment_name: 'yolo(11n-seg)_SAR(epoch800-P256_O128_BGKeep0p)'
+  #   mode: 'train' 
+  #   run: True
+  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P256_O128_BGKeep0p/SAR_2' # 相對於 data.yaml 的路徑
+  #     train: 'images/train'
+  #     val: 'images/val'
+  #     test: 'images/test'
+  #     nc: 1
+  #     names: ['oil']
+  #   epochs: 800
+  #   imgsz: 256
+  #   batch_size: 32
+  #   patience: 0 
+  #   eval_conf: 0.25
+  #   eval_iou: 0.6 # 設定驗證時的 NMS IoU
+
+  #   post_tests:
+  #     # 第一個後續測試：在它自己的 SAR 資料集上進行重組評估
+  #     - test_name: 'eval_SAR_reconstruction'
+  #       run: True
+  #       dataset:
+  #         path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P256_O128_BGKeep0p/SAR_2' 
+  #         train: 'images/train'
+  #         val: 'images/val'
+  #         test: 'images/test'
+  #         nc: 1
+  #         names: ['oil']
+  #       reconstruction:
+  #         # 這個測試也可以有自己獨立的重組設定
+  #         enabled: True
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2'
+  #         overlay_min_conf: 0.25  # (可選) BBox 最小可信度
+  #         overlay_nms_iou: 0.6   # (可選) BBox NMS IoU 閾值
+  #         overlay_alpha: 0.2     # (可選) 分割圖層的不透明度 (0.0-1.0)
+      
+  #     # 第二個後續測試：用同一個模型，去測試一個完全不同的 Zenodo 資料集
+  #     - test_name: 'eval_zenodo_reconstruction'
+  #       run: True
+  #       dataset: # dataset 可以和父實驗相同，也可以不同
+  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_patch/Patched_Data_P256_O128_BGKeep0p/zenodo'
+  #         train: 'images/train'
+  #         val: 'images/val'
+  #         test: 'images/test'
+  #         nc: 1
+  #         names: ['oil']
+  #       reconstruction:
+  #         enabled: True
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo'
+  #         overlay_min_conf: 0.25  # (可選) BBox 最小可信度
+  #         overlay_nms_iou: 0.6   # (可選) BBox NMS IoU 閾值
+  #         overlay_alpha: 0.2     # (可選) 分割圖層的不透明度 (0.0-1.0)
+
+
+
+  # # ===================================================================
+  # # 實驗 3-1: 訓練 SAR patch 640 overlap 128 background keep 0%
+  # # ===================================================================
+  # - experiment_name: 'yolo(11n-seg)_SAR(epoch800-P640_O128_BGKeep0p)'
+  #   mode: 'train' 
+  #   run: True
+  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P640_O128_BGKeep0p/SAR_2' # 相對於 data.yaml 的路徑
+  #     train: 'images/train'
+  #     val: 'images/val'
+  #     test: 'images/test'
+  #     nc: 1
+  #     names: ['oil']
+  #   epochs: 800
+  #   imgsz: 640
+  #   batch_size: 32
+  #   patience: 0 
+  #   eval_conf: 0.25
+  #   eval_iou: 0.6 # 設定驗證時的 NMS IoU
+
+  #   post_tests:
+  #     # 第一個後續測試：在它自己的 SAR 資料集上進行重組評估
+  #     - test_name: 'eval_SAR_reconstruction'
+  #       run: True
+  #       dataset:
+  #         path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P640_O128_BGKeep0p/SAR_2' 
+  #         train: 'images/train'
+  #         val: 'images/val'
+  #         test: 'images/test'
+  #         nc: 1
+  #         names: ['oil']
+  #       reconstruction:
+  #         # 這個測試也可以有自己獨立的重組設定
+  #         enabled: True
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2'
+  #         overlay_min_conf: 0.25  # (可選) BBox 最小可信度
+  #         overlay_nms_iou: 0.6   # (可選) BBox NMS IoU 閾值
+  #         overlay_alpha: 0.2     # (可選) 分割圖層的不透明度 (0.0-1.0)
+      
+  #     # 第二個後續測試：用同一個模型，去測試一個完全不同的 Zenodo 資料集
+  #     - test_name: 'eval_zenodo_reconstruction'
+  #       run: True
+  #       dataset: # dataset 可以和父實驗相同，也可以不同
+  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_patch/Patched_Data_P640_O128_BGKeep0p/zenodo'
+  #         train: 'images/train'
+  #         val: 'images/val'
+  #         test: 'images/test'
+  #         nc: 1
+  #         names: ['oil']
+  #       reconstruction:
+  #         enabled: True
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo'
+  #         overlay_min_conf: 0.25  # (可選) BBox 最小可信度
+  #         overlay_nms_iou: 0.6   # (可選) BBox NMS IoU 閾值
+  #         overlay_alpha: 0.2     # (可選) 分割圖層的不透明度 (0.0-1.0)
+
+
+
+
+  # # ===================================================================
+  # # 實驗 3-2: 訓練 SAR patch 640 overlap 128 background keep 10%
+  # # ===================================================================
+  # - experiment_name: 'yolo(11n-seg)_SAR(epoch800-P640_O128_BGKeep10p)'
+  #   mode: 'train' 
+  #   run: True
+  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P640_O128_BGKeep10p/SAR_2' # 相對於 data.yaml 的路徑
+  #     train: 'images/train'
+  #     val: 'images/val'
+  #     test: 'images/test'
+  #     nc: 1
+  #     names: ['oil']
+  #   epochs: 800
+  #   imgsz: 640
+  #   batch_size: 32
+  #   patience: 0 
+  #   eval_conf: 0.25
+  #   eval_iou: 0.6 # 設定驗證時的 NMS IoU
+
+  #   post_tests:
+  #     # 第一個後續測試：在它自己的 SAR 資料集上進行重組評估
+  #     - test_name: 'eval_SAR_reconstruction'
+  #       run: True
+  #       dataset:
+  #         path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P640_O128_BGKeep10p/SAR_2' 
+  #         train: 'images/train'
+  #         val: 'images/val'
+  #         test: 'images/test'
+  #         nc: 1
+  #         names: ['oil']
+  #       reconstruction:
+  #         # 這個測試也可以有自己獨立的重組設定
+  #         enabled: True
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2'
+  #         overlay_min_conf: 0.25  # (可選) BBox 最小可信度
+  #         overlay_nms_iou: 0.6   # (可選) BBox NMS IoU 閾值
+  #         overlay_alpha: 0.2     # (可選) 分割圖層的不透明度 (0.0-1.0)
+      
+  #     # 第二個後續測試：用同一個模型，去測試一個完全不同的 Zenodo 資料集
+  #     - test_name: 'eval_zenodo_reconstruction'
+  #       run: True
+  #       dataset: # dataset 可以和父實驗相同，也可以不同
+  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_patch/Patched_Data_P640_O128_BGKeep10p/zenodo'
+  #         train: 'images/train'
+  #         val: 'images/val'
+  #         test: 'images/test'
+  #         nc: 1
+  #         names: ['oil']
+  #       reconstruction:
+  #         enabled: True
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo'
+  #         overlay_min_conf: 0.25  # (可選) BBox 最小可信度
+  #         overlay_nms_iou: 0.6   # (可選) BBox NMS IoU 閾值
+  #         overlay_alpha: 0.2     # (可選) 分割圖層的不透明度 (0.0-1.0)
+
+
+
+  # # ===================================================================
+  # # 實驗 3-3: 訓練 SAR patch 640 overlap 128 background keep 20%
+  # # ===================================================================
+  # - experiment_name: 'yolo(11n-seg)_SAR(epoch800-P640_O128_BGKeep20p)'
+  #   mode: 'train' 
+  #   run: True
+  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P640_O128_BGKeep20p/SAR_2' # 相對於 data.yaml 的路徑
+  #     train: 'images/train'
+  #     val: 'images/val'
+  #     test: 'images/test'
+  #     nc: 1
+  #     names: ['oil']
+  #   epochs: 800
+  #   imgsz: 640
+  #   batch_size: 32
+  #   patience: 0 
+  #   eval_conf: 0.25
+  #   eval_iou: 0.6 # 設定驗證時的 NMS IoU
+
+  #   post_tests:
+  #     # 第一個後續測試：在它自己的 SAR 資料集上進行重組評估
+  #     - test_name: 'eval_SAR_reconstruction'
+  #       run: True
+  #       dataset:
+  #         path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P640_O128_BGKeep20p/SAR_2' 
+  #         train: 'images/train'
+  #         val: 'images/val'
+  #         test: 'images/test'
+  #         nc: 1
+  #         names: ['oil']
+  #       reconstruction:
+  #         # 這個測試也可以有自己獨立的重組設定
+  #         enabled: True
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2'
+  #         overlay_min_conf: 0.25  # (可選) BBox 最小可信度
+  #         overlay_nms_iou: 0.6   # (可選) BBox NMS IoU 閾值
+  #         overlay_alpha: 0.2     # (可選) 分割圖層的不透明度 (0.0-1.0)
+      
+  #     # 第二個後續測試：用同一個模型，去測試一個完全不同的 Zenodo 資料集
+  #     - test_name: 'eval_zenodo_reconstruction'
+  #       run: True
+  #       dataset: # dataset 可以和父實驗相同，也可以不同
+  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_patch/Patched_Data_P640_O128_BGKeep20p/zenodo'
+  #         train: 'images/train'
+  #         val: 'images/val'
+  #         test: 'images/test'
+  #         nc: 1
+  #         names: ['oil']
+  #       reconstruction:
+  #         enabled: True
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo'
+  #         overlay_min_conf: 0.25  # (可選) BBox 最小可信度
+  #         overlay_nms_iou: 0.6   # (可選) BBox NMS IoU 閾值
+  #         overlay_alpha: 0.2     # (可選) 分割圖層的不透明度 (0.0-1.0)  # 
+  
+  # ####################################################################
+  
+  # # ===================================================================
+  # # 實驗 4: 訓練 zenodo patch 1024 overlap 128 background keep 0%
+  # # ===================================================================
+  # - experiment_name: 'yolo(11n-seg)_zenodo(epoch800-P1024_O128_BGKeep0p)'
+  #   mode: 'train' 
+  #   run: True
+  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_patch/Patched_Data_P1024_O128_BGKeep0p/zenodo' # 相對於 data.yaml 的路徑
+  #   epochs: 800
+  #   imgsz: 1024
+  #   batch_size: 32
+  #   patience: 0 
+
+  #   post_tests:
+  #     # 第1個測試：自己的 Zenodo 資料集上進行重組評估
+  #     - test_name: 'eval_zenodo_reconstruction'
+  #       run: True
+  #       dataset: # dataset 可以和父實驗相同，也可以不同
+  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_patch/Patched_Data_P1024_O128_BGKeep0p/zenodo'
+  #       reconstruction:
+  #         enabled: True
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo'
+  #     # 第2個測試：用同一個模型，去測試一個完全不同的 SAR 資料集 
+  #     - test_name: 'eval_SAR_reconstruction'
+  #       run: True
+  #       dataset:
+  #         path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P1024_O128_BGKeep0p/SAR_2' 
+  #       reconstruction:
+  #         # 這個測試也可以有自己獨立的重組設定
+  #         enabled: True
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2'
+      
+
+
+      
+      
+  # # ===================================================================
+  # # 實驗 5: 訓練 zenodo patch 256 overlap 128 background keep 0%
+  # # ===================================================================
+  # - experiment_name: 'yolo(11n-seg)_zenodo(epoch800-P256_O128_BGKeep0p)'
+  #   mode: 'train' 
+  #   run: True
+  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_patch/Patched_Data_P256_O128_BGKeep0p/zenodo' # 相對於 data.yaml 的路徑
+  #   epochs: 800
+  #   imgsz: 256
+  #   batch_size: 32
+  #   patience: 0 
+  #   eval_conf: 0.25
+  #   eval_iou: 0.6 # 設定驗證時的 NMS IoU
+
+  #   post_tests:
+  #     # 第一個後續測試：在它自己的 zenodo 資料集上進行重組評估
+  #     - test_name: 'eval_zenodo_reconstruction'
+  #       run: True
+  #       dataset: # dataset 可以和父實驗相同，也可以不同
+  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_patch/Patched_Data_P256_O128_BGKeep0p/zenodo'
+  #       reconstruction:
+  #         enabled: True
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo'
+
+  #     # 第二個後續測試：用同一個模型，去測試一個完全不同的 SAR 資料集 
+  #     - test_name: 'eval_SAR_reconstruction'
+  #       run: True
+  #       dataset:
+  #         path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P256_O128_BGKeep0p/SAR_2' 
+  #       reconstruction:
+  #         # 這個測試也可以有自己獨立的重組設定
+  #         enabled: True
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2'
+
+
+
+
+
+  # 需要重新測量，因為少了評估指標
+    # ===================================================================
+  # 實驗 1: 重新訓練加評估結果。
+  # ===================================================================
+  - experiment_name: 'yolo(11n-seg)_SAR(epoch800-P1024_O128_BGKeep0p)'
+    mode: 'test' 
+    base_model: '/home/yuan/OIL_PROJECT/result/20250702-171606_yolo(11n-seg)_SAR(epoch800-P1024_O128_BGKeep0p)/weights/best.pt' 
+    dataset:
+      path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P1024_O128_BGKeep0p/SAR_2' 
+    epochs: 800
+    imgsz: 1024
+    batch_size: 32
+    patience: 0 
+    eval_conf: 0.25
+    eval_iou: 0.6 
+
+    post_tests:
+      # 第一個後續測試：自己 SAR 資料集上 重組評估
+      - test_name: 'eval_DV2-SAR_reconstruction'
+        dataset: 
+          path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P1024_O128_BGKeep0p/SAR_2' 
+        reconstruction:
+          enabled: True
+          original_data_root: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2'
+
+      # 第二個後續測試：用同一個模型，去測試不同的 Zenodo 資料集 
+      - test_name: 'eval_Zenodo_reconstruction'
+        dataset:
+          path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_patch/Patched_Data_P1024_O128_BGKeep0p/zenodo' 
+        reconstruction:
+          enabled: True
+          original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo'
