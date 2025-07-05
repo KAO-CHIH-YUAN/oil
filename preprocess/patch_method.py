@@ -12,8 +12,8 @@ from datetime import datetime  # <--- 新增 import
 Image.MAX_IMAGE_PIXELS = None
 
 # --- 來源與輸出設定 ---
-SOURCE_BASE_DIR = "dataset/dataset_zenodo"
-OUTPUT_BASE_DIR = "dataset/dataset_zenodo/zenodo_patch"
+SOURCE_BASE_DIR = "/home/yuan/OIL_PROJECT/dataset/dataset_zenodo"
+OUTPUT_BASE_DIR = "/home/yuan/OIL_PROJECT/dataset/dataset_zenodo/zenodo_patch"
 CATEGORIES = ["zenodo"] # SAR_2 
 SPLITS = ["train", "val", "test"]
 

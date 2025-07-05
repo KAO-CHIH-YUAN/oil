@@ -38,7 +38,7 @@ def generate_test_predictions(model, exp_config, imgsz, results_path):
         model.predict(
             source=str(test_img_dir), imgsz=imgsz, save=True,
             project=str(results_path), name=predictions_dir.name,
-            conf=exp_config.get('eval_conf'),
+            conf=exp_config.get('eval_conf', 0.25),
             exist_ok=True
         )
     except Exception as e:
@@ -94,7 +94,7 @@ def evaluate_and_visualize(exp_config, data_yaml_path, model_path, results_path)
         
         eval_charts_dir = results_path / "standard_evaluation_charts"
         print(f"  - 正在執行實例級評估 (model.val)，結果圖將儲存於: {eval_charts_dir}")
-        metrics = model.val(data=str(data_yaml_path), split='test', project=str(results_path), name=eval_charts_dir.name, exist_ok=True, imgsz=imgsz, conf=exp_config.get('eval_conf'), iou=exp_config.get('eval_iou'))
+        metrics = model.val(data=str(data_yaml_path), split='test', project=str(results_path), name=eval_charts_dir.name, exist_ok=True, imgsz=imgsz, conf=exp_config.get('eval_conf', 0.25), iou=exp_config.get('eval_iou', 0.6))
         
         eval_results = {}
         if hasattr(metrics, 'box') and metrics.box.map is not None:

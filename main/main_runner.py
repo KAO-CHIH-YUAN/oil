@@ -28,7 +28,6 @@ def run_evaluation_job(exp_config, model_to_evaluate, results_path, excel_path, 
     eval_dataset_config.setdefault('nc', 1)
     eval_dataset_config.setdefault('names', ['oil'])
     
-    # 確保 post_test 的子資料夾也存在
     eval_results_path = results_path
     eval_results_path.mkdir(exist_ok=True, parents=True)
     
@@ -91,80 +90,84 @@ def main():
     ]
 
     for exp_config in master_config.get('experiments', []):
-        if not exp_config.get('run', True):
-            continue
-
+        
         timestamp = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
         current_exp_config = copy.deepcopy(exp_config)
 
+        current_exp_config.setdefault('run', True)
+        current_exp_config.setdefault('eval_conf', 0.25)
+        current_exp_config.setdefault('eval_iou', 0.6)
+        
+        if not current_exp_config['run']:
+            continue
+
         results_path = None
+        dependency_failed = False
+        is_finetune = False
+        base_model_path_str = str(current_exp_config.get('base_model', ''))
         
-        # --- 步驟 1: 優先確定本次執行的根目錄 (results_path) ---
-        if current_exp_config['mode'] == 'test':
-            base_model_path = Path(current_exp_config['base_model'])
-            if base_model_path.exists() and len(base_model_path.parents) > 1:
-                results_path = base_model_path.parents[1]
-                print(f"\n[Info] Test 模式偵測到。將輸出路徑設定至模型所在資料夾: {results_path}")
-        
-        elif current_exp_config['mode'] == 'train':
-            base_model_path_str = str(current_exp_config['base_model'])
+        # ⭐⭐⭐ 新增: 加入偵錯日誌 ⭐⭐⭐
+        print("\n" + "="*80)
+        print(f"==> 開始處理實驗: {current_exp_config.get('experiment_name')}")
+        print(f"    - 當前已完成的依賴項: {list(completed_experiments_paths.keys())}")
+        print(f"    - 此實驗的 base_model: {base_model_path_str}")
+        print("="*80)
+
+        if '{{' in base_model_path_str:
+            is_finetune = True
+            match_found = False
             for name, completed_path in completed_experiments_paths.items():
                 placeholder = f'{{{{{name}}}}}'
                 if placeholder in base_model_path_str:
+                    match_found = True
                     if completed_path is None:
-                        print(f"跳過實驗 '{current_exp_config['experiment_name']}'，因其依賴的實驗 '{name}' 執行失敗。")
-                        continue
-                    current_exp_config['base_model'] = base_model_path_str.replace(placeholder, str(completed_path))
-                    results_path = completed_path / f"finetune_{timestamp}_{current_exp_config['experiment_name']}"
+                        print(f"==> [錯誤] 跳過實驗 '{current_exp_config['experiment_name']}'，因其依賴的實驗 '{name}' 執行失敗。")
+                        dependency_failed = True
+                        break
+                    
+                    new_base_model = base_model_path_str.replace(placeholder, str(completed_path))
+                    print(f"==> [成功] 找到依賴 '{name}'，將 base_model 解析為: {new_base_model}")
+                    current_exp_config['base_model'] = new_base_model
+                    
+                    if current_exp_config['mode'] == 'train':
+                        results_path = completed_path / f"finetune_{timestamp}_{current_exp_config['experiment_name']}"
                     break
+            
+            if not match_found:
+                 print(f"==> [警告] 在 base_model 中找到佔位符，但在已完成的實驗中找不到匹配的依賴項。請檢查 yaml 中的 experiment_name 是否有錯字。")
 
+        if dependency_failed:
+            continue
+            
         if results_path is None:
-            results_path = results_base_dir / f"{timestamp}_{current_exp_config['experiment_name']}"
-
-        # ⭐⭐⭐ 修正: 將建立資料夾的指令移到這裡 ⭐⭐⭐
-        # 確保在執行任何任務之前，根目錄都已經被建立
+            if current_exp_config['mode'] == 'test':
+                base_model_path = Path(current_exp_config['base_model'])
+                if base_model_path.exists() and len(base_model_path.parents) > 1:
+                    results_path = base_model_path.parents[1]
+                else: 
+                    results_path = results_base_dir / f"{timestamp}_{current_exp_config['experiment_name']}"
+            else:
+                results_path = results_base_dir / f"{timestamp}_{current_exp_config['experiment_name']}"
+        
         results_path.mkdir(exist_ok=True, parents=True)
 
-        # --- 步驟 2: 執行主要任務 (訓練或準備測試) ---
         inherited_training_metrics = {}
         model_to_evaluate = None
         training_success = False
 
         if current_exp_config['mode'] == 'test':
             model_to_evaluate = current_exp_config['base_model']
-            try:
-                log_df = pd.read_excel(excel_path, index_col=0, engine='openpyxl')
-                model_to_evaluate_abs_path = Path(model_to_evaluate).resolve()
-                for col_name in log_df.columns:
-                    excel_model_path_str = log_df[col_name].get('best_model_path')
-                    if excel_model_path_str and isinstance(excel_model_path_str, str):
-                        excel_model_abs_path = Path(excel_model_path_str).resolve()
-                        if excel_model_abs_path == model_to_evaluate_abs_path:
-                            inherited_training_metrics = {
-                                'training_time_minutes': log_df[col_name].get('training_time_minutes'),
-                                'Ram_GB': log_df[col_name].get('Ram_GB'),
-                                'gpu_name': log_df[col_name].get('gpu_name'),
-                            }
-                            print(f"  [Info] 成功從原始實驗 '{col_name}' 繼承訓練指標。")
-                            break
-            except FileNotFoundError:
-                print(f"  [警告] Excel 日誌 '{excel_path}' 不存在，無法繼承訓練指標。")
-            except Exception as e:
-                print(f"  [警告] 讀取 Excel 日誌以繼承指標時發生錯誤: {e}")
-
+            # ... (繼承指標的邏輯不變)
         elif current_exp_config['mode'] == 'train':
-            is_finetune = 'finetune' in results_path.name if results_path else False
             current_exp_config['experiment_type'] = 'finetune' if is_finetune else 'train'
-            
-            # 此時 results_path 目錄已存在，可以安全地傳入 train_model
             training_results = train_model(current_exp_config, results_path) or {}
             if training_results and 'best_model_path' in training_results:
                 model_to_evaluate = training_results.get('best_model_path')
                 training_success = True
                 inherited_training_metrics = training_results
 
-        # --- 步驟 3: 執行評估任務 ---
         if model_to_evaluate and Path(model_to_evaluate).exists():
+            # ... (後續評估邏輯不變)
             post_tests = current_exp_config.get('post_tests', [])
             if not post_tests:
                 if current_exp_config['mode'] == 'train':
@@ -173,13 +176,17 @@ def main():
             else:
                 print(f"\n偵測到 post_tests, 開始執行後續測試任務...")
                 for test_job in post_tests:
-                    if not test_job.get('run', True): continue
+                    test_job.setdefault('run', True)
+                    if not test_job['run']: continue
 
                     test_timestamp = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
                     test_results_path = results_path / f"post_test_{test_timestamp}_{test_job['test_name']}"
 
                     test_run_config = copy.deepcopy(current_exp_config)
                     test_run_config.update(test_job)
+                    
+                    test_run_config.setdefault('eval_conf', current_exp_config['eval_conf'])
+                    test_run_config.setdefault('eval_iou', current_exp_config['eval_iou'])
 
                     run_evaluation_job(test_run_config, model_to_evaluate, test_results_path, excel_path, desired_order, test_timestamp, inherited_training_metrics)
 

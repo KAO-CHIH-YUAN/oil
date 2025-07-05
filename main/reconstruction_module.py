@@ -9,15 +9,8 @@ from torchvision.ops import nms
 
 def stitch_masks(patch_predictions_with_scores, original_size):
     """
-    ⭐【新版功能】將來自多個圖塊(patch)的分割遮罩，透過「加權平均」的方式平滑地拼接到一張原始大圖上。
+    【加權平均版】將來自多個圖塊(patch)的分割遮罩，透過「加權平均」的方式平滑地拼接到一張原始大圖上。
     權重為每個遮罩對應的 bounding box 信心度分數。
-
-    Args:
-        patch_predictions_with_scores (list): 一個列表，每個元素為元組 (mask_tensor, score, x_coord, y_coord)。
-        original_size (tuple): (寬, 高) 的原始影像尺寸。
-
-    Returns:
-        np.ndarray: 一個二值化的 (0 或 1) 完整尺寸預測遮罩。
     """
     stitched_canvas = np.zeros((original_size[1], original_size[0]), dtype=np.float32)
     weight_map = np.zeros_like(stitched_canvas, dtype=np.float32)
@@ -60,10 +53,11 @@ def draw_final_boxes(image, boxes, scores, labels):
 
 def run_reconstruction_evaluation(model, test_image_dir, original_data_root, results_path, imgsz, vis_params):
     """
-    ⭐【新版功能】執行完整的圖塊重組評估流程。
-    此版本採用「先NMS，後拼接」的策略，並使用加權平均來生成遮罩，確保 BBox 和 Seg 的一致性。
+    ⭐【最終修正版：混合模式】
+    - 對於 Bounding Box：使用 NMS 產生清晰、不重疊的結果。
+    - 對於 Segmentation：使用所有高信心度的偵測結果進行加權平均，以得到最穩健的分割圖。
     """
-    print("\n--- 開始執行 Patch 重組評估 (新版：NMS優先 + 加權拼接) ---")
+    print("\n--- 開始執行 Patch 重組評估 (最終版：混合模式) ---")
     original_images_dir = original_data_root / 'images' / 'test'
     original_gt_dir = original_data_root / 'labels' / 'test'
     if not original_images_dir.is_dir() or not original_gt_dir.is_dir(): return {}
@@ -93,6 +87,7 @@ def run_reconstruction_evaluation(model, test_image_dir, original_data_root, res
         gt_mask_binary = (gt_mask_cv > 0).astype(np.uint8)
         h, w, _ = original_image.shape
         
+        # 步驟 1: 收集當前大圖所有 patch 上的所有高信心度偵測物件
         all_detections_on_image = []
         for patch_path, x, y in patches:
             results = model.predict(source=str(patch_path), verbose=False, imgsz=imgsz, conf=vis_params['min_conf'])
@@ -113,33 +108,34 @@ def run_reconstruction_evaluation(model, test_image_dir, original_data_root, res
 
         if not all_detections_on_image:
             reconstructed_mask = np.zeros((h, w), dtype=np.uint8)
-            total_tp += np.sum(np.logical_and(reconstructed_mask, gt_mask_binary))
-            total_tn += np.sum(np.logical_and(np.logical_not(reconstructed_mask), np.logical_not(gt_mask_binary)))
-            total_fp += np.sum(np.logical_and(reconstructed_mask, np.logical_not(gt_mask_binary)))
-            total_fn += np.sum(np.logical_and(np.logical_not(reconstructed_mask), gt_mask_binary))
-            continue
+        else:
+            # ⭐⭐⭐ 核心修改：分離 BBox 和 Segmentation 的處理 ⭐⭐⭐
 
-        boxes_tensor = torch.tensor([d['global_box'] for d in all_detections_on_image], dtype=torch.float32)
-        scores_tensor = torch.tensor([d['score'] for d in all_detections_on_image], dtype=torch.float32)
-        winning_indices = nms(boxes_tensor, scores_tensor, vis_params['nms_iou'])
+            # --- 2a. 處理 Bounding Box：對所有偵測物件執行 NMS，以得到最終要繪製的清晰邊界框 ---
+            boxes_tensor = torch.tensor([d['global_box'] for d in all_detections_on_image], dtype=torch.float32)
+            scores_tensor = torch.tensor([d['score'] for d in all_detections_on_image], dtype=torch.float32)
+            winning_indices = nms(boxes_tensor, scores_tensor, vis_params['nms_iou'])
 
-        final_boxes = boxes_tensor[winning_indices].numpy()
-        final_scores = scores_tensor[winning_indices].numpy()
-        final_labels = [model.names[0]] * len(winning_indices)
+            final_boxes = boxes_tensor[winning_indices].numpy()
+            final_scores = scores_tensor[winning_indices].numpy()
+            final_labels = [model.names[0]] * len(winning_indices)
 
-        winning_mask_inputs = []
-        for idx in winning_indices:
-            detection = all_detections_on_image[idx]
-            winning_mask_inputs.append(
-                (detection['mask'], detection['score'], detection['origin_x'], detection['origin_y'])
-            )
-        reconstructed_mask = stitch_masks(winning_mask_inputs, (w, h))
+            # --- 2b. 處理 Segmentation：使用「所有」高信心度的偵測遮罩進行加權平均，以得到最穩健的分割圖 ---
+            # 準備 stitch_masks 的輸入，這次使用 all_detections_on_image 而不是 NMS 的勝利者
+            all_mask_inputs = []
+            for detection in all_detections_on_image:
+                all_mask_inputs.append(
+                    (detection['mask'], detection['score'], detection['origin_x'], detection['origin_y'])
+                )
+            reconstructed_mask = stitch_masks(all_mask_inputs, (w, h))
 
+        # --- 步驟 3: 計算指標 (基於最終的 reconstructed_mask) ---
         total_tp += np.sum(np.logical_and(reconstructed_mask, gt_mask_binary))
         total_tn += np.sum(np.logical_and(np.logical_not(reconstructed_mask), np.logical_not(gt_mask_binary)))
         total_fp += np.sum(np.logical_and(reconstructed_mask, np.logical_not(gt_mask_binary)))
         total_fn += np.sum(np.logical_and(np.logical_not(reconstructed_mask), gt_mask_binary))
 
+        # --- 步驟 4: 產生並儲存視覺化結果 (使用 NMS 後的 final_boxes) ---
         per_image_iou = calculate_iou(reconstructed_mask, gt_mask_binary)
         label_vis_image = np.zeros((h, w, 3), dtype=np.uint8)
         label_vis_image[gt_mask_binary == 1] = [0, 255, 0]
@@ -152,12 +148,10 @@ def run_reconstruction_evaluation(model, test_image_dir, original_data_root, res
         overlay[np.logical_and(reconstructed_mask, np.logical_not(gt_mask_binary))] = (0, 0, 255)
         overlay[np.logical_and(np.logical_not(reconstructed_mask), gt_mask_binary)] = (255, 0, 0)
         final_overlay_image = cv2.addWeighted(overlay, alpha, original_image, 1 - alpha, 0)
-        
-        # ⭐⭐⭐ 這就是修正後的程式碼行 ⭐⭐⭐
-        # 將遺漏的 final_boxes 參數加回去
         final_overlay_image_with_boxes = draw_final_boxes(final_overlay_image, final_boxes, final_scores, final_labels)
         cv2.imwrite(str(overlay_vis_dir / f"{original_name}_overlay_iou_{per_image_iou:.4f}.png"), final_overlay_image_with_boxes)
 
+    # --- 最終步驟: 在所有圖片處理完後，計算並回傳整體指標 ---
     iou_denominator = total_tp + total_fp + total_fn
     final_iou = total_tp / iou_denominator if iou_denominator > 0 else 0
     acc_denominator = total_tp + total_tn + total_fp + total_fn
