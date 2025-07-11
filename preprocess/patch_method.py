@@ -5,8 +5,8 @@ import numpy as np
 from PIL import Image
 from tqdm import tqdm
 import random
-import pandas as pd  # <--- 新增 import
-from datetime import datetime  # <--- 新增 import
+import pandas as pd
+from datetime import datetime
 
 # PIL 可能會對大圖有警告，設定此項可避免
 Image.MAX_IMAGE_PIXELS = None
@@ -20,6 +20,7 @@ SPLITS = ["train", "val", "test"]
 # --- Patching 參數設定 ---
 PATCH_SIZE = 640
 OVERLAP = 128
+RANDOM_SEED = 42  # <--- 設定固定的隨機數種子，確保可重現性
 
 # --- 背景樣本保留比例設定 (僅對 train/val 有效) ---
 BACKGROUND_KEEP_RATIO = 0.2
@@ -32,7 +33,6 @@ TXT_GENERATION_PARAMS = {
     "min_contour_area": 1.0
 }
 
-# (slice_image_with_padding_generator, check_target_pixels_exist, convert_mask_png_to_yolo_txt 函數保持不變)
 def slice_image_with_padding_generator(image_pil, mask_pil, patch_size, overlap):
     image_width, image_height = image_pil.size
     if image_width < patch_size or image_height < patch_size:
@@ -95,20 +95,23 @@ def convert_mask_png_to_yolo_txt(png_path, output_txt_path, params):
         print(f"  [ERROR] 處理檔案 '{png_path}' 時發生錯誤: {e}")
         return "error"
 
-
 # ==============================================================================
 # --- 3. 主處理流程 (整合 Excel Log) ---
 # ==============================================================================
 
 def main():
     """主執行函數"""
+    random.seed(RANDOM_SEED)
+    
+    # <--- 修改：根據您的要求，將輸出目錄名稱復原，不包含 Seed ---
     output_dir_name = f"Patched_Data_P{PATCH_SIZE}_O{OVERLAP}_BGKeep{int(BACKGROUND_KEEP_RATIO*100)}p"
     main_output_path = os.path.join(OUTPUT_BASE_DIR, output_dir_name)
-    print(f"所有 patch 後的資料將儲存到: {main_output_path}\n")
+    
+    print(f"所有 patch 後的資料將儲存到: {main_output_path}")
+    print(f"使用固定的隨機數種子: {RANDOM_SEED}\n")
 
-    # <--- 新增部分：準備 Excel Log ---
     run_timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    current_run_stats = [] # 用來儲存這次執行的所有統計數據
+    current_run_stats = []
 
     for category in CATEGORIES:
         for split in SPLITS:
@@ -133,13 +136,12 @@ def main():
                 print(f"  [Info] 檢測到 'test' split，將強制保留 100% 的背景圖塊以便後續重組。")
 
             image_files = [f for f in os.listdir(source_img_dir) if f.lower().endswith(('.jpg', '.jpeg', '.png'))]
-            source_image_count = len(image_files) # <--- 取得原始圖片數量
+            source_image_count = len(image_files)
             
             total_patches_with_oil = 0
             total_patches_background_kept = 0
             
             for image_filename in tqdm(image_files, desc=f"Processing {category}/{split}", unit="image"):
-                # ... (內部處理迴圈維持不變) ...
                 base_filename = os.path.splitext(image_filename)[0]
                 image_path = os.path.join(source_img_dir, image_filename)
                 mask_path = os.path.join(source_mask_dir, base_filename + ".png")
@@ -181,7 +183,6 @@ def main():
                  print(f"  為 'test' split 保留了全部 {total_patches_background_kept} 個不含油污的 patches。")
             print(f"  '{category}/{split}' 總共產生 {total_patches_with_oil + total_patches_background_kept} 個樣本。")
             
-            # <--- 新增部分：將這次的統計數據存入 list ---
             stat_record = {
                 "RunTimestamp": run_timestamp,
                 "Category": category,
@@ -193,12 +194,12 @@ def main():
                 "PatchSize": PATCH_SIZE,
                 "Overlap": OVERLAP,
                 "BG_Keep_Ratio_Setting": BACKGROUND_KEEP_RATIO,
-                "Effective_BG_Keep_Ratio": effective_bg_keep_ratio
+                "Effective_BG_Keep_Ratio": effective_bg_keep_ratio,
+                "RandomSeed": RANDOM_SEED
             }
             current_run_stats.append(stat_record)
             print("-" * (20 + len(category) + len(split)) + "\n")
 
-    # <--- 新增部分：在所有處理完成後，寫入 Excel 檔案 ---
     if not current_run_stats:
         print("沒有處理任何資料，不產生 Log 檔案。")
         return
@@ -214,6 +215,9 @@ def main():
         else:
             print(f"正在創建新的 Log 檔案: {excel_log_path}")
             combined_df = new_stats_df
+
+        if "RandomSeed" in combined_df.columns:
+            combined_df["RandomSeed"] = combined_df["RandomSeed"].astype('Int64')
 
         combined_df.to_excel(excel_log_path, index=False)
         print("Excel Log 檔案已成功更新。")
