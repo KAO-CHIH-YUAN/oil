@@ -52,7 +52,8 @@ def train_model(config, results_path):
             name=results_path.name,           # 實驗名稱設定為 results_path 的資料夾名稱
             exist_ok=True,
             conf=config.get('eval_conf', 0.25), # 訓練期間驗證(validation)所用的信心度
-            iou=config.get('eval_iou', 0.6)    # 訓練期間驗證(validation)所用的 IoU 閾值
+            iou=config.get('eval_iou', 0.6),    # 訓練期間驗證(validation)所用的 IoU 閾值
+            cls=config.get('cls_weight', 0.5)
         )
 
         # --- 步驟 3: 計算並回傳訓練效能指標 ---
