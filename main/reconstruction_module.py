@@ -63,8 +63,10 @@ def run_reconstruction_evaluation(model, test_image_dir, original_data_root, res
     original_gt_dir = original_data_root / 'labels' / 'test'
     if not original_images_dir.is_dir() or not original_gt_dir.is_dir(): return {}
 
+    all_patch_files = list(test_image_dir.glob('*.jpg')) + list(test_image_dir.glob('*.png'))
+
     patches_by_original = defaultdict(list)
-    for patch_path in test_image_dir.glob('*.jpg'):
+    for patch_path in all_patch_files:
         match = re.match(r"(.+)_patch_x(\d+)_y(\d+)", patch_path.stem)
         if match:
             original_name, x, y = match.groups()

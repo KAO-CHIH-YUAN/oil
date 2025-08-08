@@ -12,14 +12,14 @@ from datetime import datetime
 Image.MAX_IMAGE_PIXELS = None
 
 # --- 來源與輸出設定 ---
-SOURCE_BASE_DIR = "/home/yuan/OIL_PROJECT/dataset/dataset_SAR_2"
-OUTPUT_BASE_DIR = "/home/yuan/OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_PNG_relabel_rearrange_Patch"
-CATEGORIES = ["SAR_2_PNG_relabel_rearrange"] # SAR_2 zenodo
+SOURCE_BASE_DIR = "/home/yuan/OIL_PROJECT/dataset/dataset_zenodo"
+OUTPUT_BASE_DIR = "/home/yuan/OIL_PROJECT/dataset/dataset_zenodo/zenodo_original_all_classes_patch_png"
+CATEGORIES = ["zenodo_original_all_classes"] # SAR_2 zenodo
 SPLITS = ["train", "val", "test"]
 
 # --- Patching 參數設定 ---
-PATCH_SIZE = 1024
-OVERLAP = 0
+PATCH_SIZE = 640
+OVERLAP = 128
 RANDOM_SEED = 42
 
 # --- 背景樣本保留比例設定 ---
@@ -206,11 +206,11 @@ def main():
                             else:
                                 current_img_dir, current_label_dir = output_img_dir, output_label_dir
                             
-                            output_jpg_path = os.path.join(current_img_dir, f"{patch_base_name}.jpg")
+                            output_img_png_path = os.path.join(current_img_dir, f"{patch_base_name}.png") 
                             output_png_path = os.path.join(current_label_dir, f"{patch_base_name}.png")
                             output_txt_path = os.path.join(current_label_dir, f"{patch_base_name}.txt")
                             
-                            patch_img.save(output_jpg_path)
+                            patch_img.save(output_img_png_path) # <--- 修改此行，儲存為 PNG
                             patch_mask.save(output_png_path)
                             
                             if has_target:

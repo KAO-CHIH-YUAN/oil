@@ -1,7 +1,7 @@
 # 實驗結果儲存的根目錄
-results_base_dir: '/home/yuan/OIL_PROJECT/result-rearrange'
+results_base_dir: '/home/yuan/OIL_PROJECT/result-rearrange-png'
 # Excel 記錄檔的路徑 
-excel_log_path: '/home/yuan/OIL_PROJECT/result_excel/Auguest_6_DV2-SAR-relabel-rearrange_log.xlsx'
+excel_log_path: '/home/yuan/OIL_PROJECT/result_excel/Auguest_8_DV2-SAR-relabel-rearrange_Patch-method-png_log.xlsx'
 
 # 要執行的實驗列表
 experiments:
@@ -3023,14 +3023,107 @@ experiments:
   ########################################################################################################
   ########################################################################################################
 
-  - experiment_name: 'HNM_SAR2-Relabel-rearrange_P1024'
-    mode: 'train'
-    run: True
-    base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt'
+  # - experiment_name: 'HNM_SAR2-Relabel-rearrange_P1024'
+  #   mode: 'train'
+  #   run: True
+  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt'
+  #   dataset:
+  #     # 指向階段二的輸出路徑
+  #     path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_PNG_relabel_rearrange_Patch/HNM_Step1_TrainingSet_P1024'
+  #   epochs: 50  # Model v1 不需要訓練太久
+  #   imgsz: 1024
+  #   batch_size: 64
+  #   patience: 0
+
+
+
+
+  ########################################################################################################
+  ########################################################################################################
+  ########################################################################################################
+  #################                                                                   ####################
+  #################                                                                   ####################
+  #################                                                                   ####################
+  #################                                                                   ####################
+  #################                                                                   ####################
+  ###--------------                    2025-08-08                                     -----------------###
+  #################             patch_method 生成出來的可以是PNG了                      ####################
+  #################                     之前還是jpg                                    ####################
+  #################                                                                   ####################
+  #################                                                                   ####################
+  #################                                                                   ####################
+  ########################################################################################################
+  ########################################################################################################
+  ########################################################################################################
+  # ===================================================================
+  - experiment_name: 'DV2-SAR(P640_BGK20)-(patch_png)'
+    mode: 'train' 
+    base_model: '/home/yuan/OIL_PROJECT/code/main/yolo11n-seg.pt' 
     dataset:
-      # 指向階段二的輸出路徑
-      path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_PNG_relabel_rearrange_Patch/HNM_Step1_TrainingSet_P1024'
-    epochs: 50  # Model v1 不需要訓練太久
+      path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_PNG_relabel_rearrange_Patch-png/Patched_P640_O128_BG20p/SAR_2_PNG_relabel_rearrange' 
+    epochs: 800
+    imgsz: 640
+    batch_size: 128
+    patience: 0
+    cls_weight: 0.5 
+    post_tests:
+      - test_name: 'DV2-SAR' 
+        dataset: 
+          path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_PNG_relabel_rearrange_Patch-png/Patched_P640_O128_BG20p/SAR_2_PNG_relabel_rearrange' 
+        reconstruction:
+          enabled: True
+          original_data_root: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_PNG_relabel_rearrange'
+
+  - experiment_name: 'DV2-SAR(P1024_BGK20)-(patch_png)'
+    mode: 'train' 
+    base_model: '/home/yuan/OIL_PROJECT/code/main/yolo11n-seg.pt' 
+    dataset:
+      path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_PNG_relabel_rearrange_Patch-png/Patched_P1024_O128_BG20p/SAR_2_PNG_relabel_rearrange' 
+    epochs: 800
     imgsz: 1024
     batch_size: 64
     patience: 0
+    cls_weight: 0.5 
+    post_tests:
+      - test_name: 'DV2-SAR' 
+        dataset: 
+          path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_PNG_relabel_rearrange_Patch-png/Patched_P1024_O128_BG20p/SAR_2_PNG_relabel_rearrange' 
+        reconstruction:
+          enabled: True
+          original_data_root: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_PNG_relabel_rearrange'
+
+  - experiment_name: 'Zenodo-3type(P640_BGK20)-(patch_png)'
+    mode: 'train' 
+    base_model: '/home/yuan/OIL_PROJECT/code/main/yolo11n-seg.pt' 
+    dataset:
+      path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_original_all_classes_patch_png/Patched_P640_O128_BG20p/zenodo_original_all_classes' 
+    epochs: 800
+    imgsz: 640
+    batch_size: 128
+    patience: 300
+    cls_weight: 0.5 
+    post_tests:
+      - test_name: 'Zenodo' 
+        dataset: 
+          path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_original_all_classes_patch_png/Patched_P640_O128_BG20p/zenodo_original_all_classes' 
+        reconstruction:
+          enabled: True
+          original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_original_all_classes'
+
+  # - experiment_name: 'Zenodo-3type(P1024_BGK20)-(patch_png)'
+  #   mode: 'train' 
+  #   base_model: '/home/yuan/OIL_PROJECT/code/main/yolo11n-seg.pt' 
+  #   dataset:
+  #     path: '' 
+  #   epochs: 800
+  #   imgsz: 1024
+  #   batch_size: 64
+  #   patience: 0
+  #   cls_weight: 0.5 
+  #   post_tests:
+  #     - test_name: 'Zenodo' 
+  #       dataset: 
+  #         path: '' 
+  #       reconstruction:
+  #         enabled: True
+  #         original_data_root: ''
