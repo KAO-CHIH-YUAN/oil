@@ -1,1186 +1,10 @@
 # 實驗結果儲存的根目錄
-results_base_dir: '/home/yuan/OIL_PROJECT/result-rearrange-png'
+results_base_dir: '/home/yuan/OIL_PROJECT/result_zenodo_vv_vh'
 # Excel 記錄檔的路徑 
-excel_log_path: '/home/yuan/OIL_PROJECT/result_excel/Auguest_8_DV2-SAR-relabel-rearrange_Patch-method-png_log.xlsx'
+excel_log_path: '/home/yuan/OIL_PROJECT/result_excel/Auguest_31_Zenodo_VV_VH_log.xlsx' 
 
 # 要執行的實驗列表
 experiments:
-  # # ===================================================================
-  # # 實驗 1-1: 訓練模式 (train)
-  # # 從頭開始訓練一個 Zenodo 分割模型
-  # # ===================================================================
-  # - experiment_name: 'yolo(11n-seg)_zenodo(vv-OnlyOil-epoch800)_imgsz1024'
-  #   mode: 'train' # 執行訓練 + 評估
-  #   run: True
-  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt'
-  #   dataset:
-  #     path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo' # 相對於 data.yaml 的路徑
-  #     train: 'images/train'
-  #     val: 'images/val'
-  #     test: 'images/test'
-  #     nc: 1
-  #     names: ['oil']
-  #   epochs: 800
-  #   imgsz: 1024
-  #   batch_size: 32
-  #   patience: 0 
-  #   eval_conf: 0.25
-  #   eval_iou: 0.6 # 設定驗證時的 NMS IoU
-
-  # # ===================================================================
-  # # 實驗 1-2: 微調模式 (train)
-  # # 接續實驗 1 的模型，在 SAR 資料集上進行微調
-  # # ===================================================================
-  # - experiment_name: 'yolo(11n-seg)_zenodo(vv-OnlyOil-epoch800)_SAR(epoch800-No_patch)_imgsz1024'
-  #   mode: 'train'
-  #   run: True
-  #   base_model: '{{yolo(11n-seg)_zenodo(vv-OnlyOil-epoch800)_imgsz1024}}/weights/best.pt'
-  #   dataset:
-  #     path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2'
-  #     train: 'images/train'
-  #     val: 'images/val'
-  #     test: 'images/test'
-  #     nc: 1
-  #     names: ['oil']
-  #   epochs: 800
-  #   imgsz: 1024
-  #   batch_size: 32
-  #   patience: 0 
-  #   eval_conf: 0.25
-  #   eval_iou: 0.6 # 設定驗證時的 NMS IoU
-
-  
-  # # ===================================================================
-  # # 實驗 2-1: 訓練模式 (train)
-  # # 從頭開始訓練一個 Zenodo 分割模型
-  # # ===================================================================
-  # - experiment_name: 'yolo(11n-seg)_zenodo(vv-OnlyOil-epoch800)_imgsz640'
-  #   mode: 'train' # 執行訓練 + 評估
-  #   run: True
-  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt'
-  #   dataset:
-  #     path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo' # 相對於 data.yaml 的路徑
-  #     train: 'images/train'
-  #     val: 'images/val'
-  #     test: 'images/test'
-  #     nc: 1
-  #     names: ['oil']
-  #   epochs: 800
-  #   imgsz: 640
-  #   batch_size: 32
-  #   patience: 0 
-  #   eval_conf: 0.25
-  #   eval_iou: 0.6 # 設定驗證時的 NMS IoU
-
-  # # ===================================================================
-  # # 實驗 2-2: 微調模式 (train)
-  # # 接續實驗 1 的模型，在 SAR 資料集上進行微調
-  # # ===================================================================
-  # - experiment_name: 'yolo(11n-seg)_zenodo(vv-OnlyOil-epoch800)_SAR(epoch800-No_patch)_imgsz640'
-  #   mode: 'train'
-  #   run: True
-  #   base_model: '{{yolo(11n-seg)_zenodo(vv-OnlyOil-epoch800)_imgsz640}}/weights/best.pt'
-  #   dataset:
-  #     path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2'
-  #     train: 'images/train'
-  #     val: 'images/val'
-  #     test: 'images/test'
-  #     nc: 1
-  #     names: ['oil']
-  #   epochs: 800
-  #   imgsz: 640
-  #   batch_size: 32
-  #   patience: 0 
-  #   eval_conf: 0.25
-  #   eval_iou: 0.6 # 設定驗證時的 NMS IoU
-
-
-
-
-
-  # # ===================================================================
-  # # 實驗 1: 訓練 SAR patch 1024 overlap 128 background keep 0%
-  # # ===================================================================
-  # - experiment_name: 'yolo(11n-seg)_SAR(epoch800-P1024_O128_BGKeep0p)'
-  #   mode: 'train' 
-  #   run: True
-  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt' 
-  #   dataset:
-  #     path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P1024_O128_BGKeep0p/SAR_2' # 相對於 data.yaml 的路徑
-  #     train: 'images/train'
-  #     val: 'images/val'
-  #     test: 'images/test'
-  #     nc: 1
-  #     names: ['oil']
-  #   epochs: 800
-  #   imgsz: 1024
-  #   batch_size: 32
-  #   patience: 0 
-  #   eval_conf: 0.25
-  #   eval_iou: 0.6 # 設定驗證時的 NMS IoU
-
-  #   post_tests:
-  #     # 第一個後續測試：在它自己的 SAR 資料集上進行重組評估
-  #     - test_name: 'eval_SAR_reconstruction'
-  #       run: True
-  #       dataset:
-  #         path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P1024_O128_BGKeep0p/SAR_2' 
-  #         train: 'images/train'
-  #         val: 'images/val'
-  #         test: 'images/test'
-  #         nc: 1
-  #         names: ['oil']
-  #       reconstruction:
-  #         # 這個測試也可以有自己獨立的重組設定
-  #         enabled: True
-  #         original_data_root: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2'
-  #         overlay_min_conf: 0.25  # (可選) BBox 最小可信度
-  #         overlay_nms_iou: 0.6   # (可選) BBox NMS IoU 閾值
-  #         overlay_alpha: 0.2     # (可選) 分割圖層的不透明度 (0.0-1.0)
-      
-  #     # 第二個後續測試：用同一個模型，去測試一個完全不同的 Zenodo 資料集
-  #     - test_name: 'eval_zenodo_reconstruction'
-  #       run: True
-  #       dataset: # dataset 可以和父實驗相同，也可以不同
-  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_patch/Patched_Data_P1024_O128_BGKeep0p/zenodo'
-  #         train: 'images/train'
-  #         val: 'images/val'
-  #         test: 'images/test'
-  #         nc: 1
-  #         names: ['oil']
-  #       reconstruction:
-  #         enabled: True
-  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo'
-  #         overlay_min_conf: 0.25  # (可選) BBox 最小可信度
-  #         overlay_nms_iou: 0.6   # (可選) BBox NMS IoU 閾值
-  #         overlay_alpha: 0.2     # (可選) 分割圖層的不透明度 (0.0-1.0)
-
-      
-      
-  # # ===================================================================
-  # # 實驗 2: 訓練 SAR patch 256 overlap 128 background keep 0%
-  # # ===================================================================
-  # - experiment_name: 'yolo(11n-seg)_SAR(epoch800-P256_O128_BGKeep0p)'
-  #   mode: 'train' 
-  #   run: True
-  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt' 
-  #   dataset:
-  #     path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P256_O128_BGKeep0p/SAR_2' # 相對於 data.yaml 的路徑
-  #     train: 'images/train'
-  #     val: 'images/val'
-  #     test: 'images/test'
-  #     nc: 1
-  #     names: ['oil']
-  #   epochs: 800
-  #   imgsz: 256
-  #   batch_size: 32
-  #   patience: 0 
-  #   eval_conf: 0.25
-  #   eval_iou: 0.6 # 設定驗證時的 NMS IoU
-
-  #   post_tests:
-  #     # 第一個後續測試：在它自己的 SAR 資料集上進行重組評估
-  #     - test_name: 'eval_SAR_reconstruction'
-  #       run: True
-  #       dataset:
-  #         path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P256_O128_BGKeep0p/SAR_2' 
-  #         train: 'images/train'
-  #         val: 'images/val'
-  #         test: 'images/test'
-  #         nc: 1
-  #         names: ['oil']
-  #       reconstruction:
-  #         # 這個測試也可以有自己獨立的重組設定
-  #         enabled: True
-  #         original_data_root: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2'
-  #         overlay_min_conf: 0.25  # (可選) BBox 最小可信度
-  #         overlay_nms_iou: 0.6   # (可選) BBox NMS IoU 閾值
-  #         overlay_alpha: 0.2     # (可選) 分割圖層的不透明度 (0.0-1.0)
-      
-  #     # 第二個後續測試：用同一個模型，去測試一個完全不同的 Zenodo 資料集
-  #     - test_name: 'eval_zenodo_reconstruction'
-  #       run: True
-  #       dataset: # dataset 可以和父實驗相同，也可以不同
-  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_patch/Patched_Data_P256_O128_BGKeep0p/zenodo'
-  #         train: 'images/train'
-  #         val: 'images/val'
-  #         test: 'images/test'
-  #         nc: 1
-  #         names: ['oil']
-  #       reconstruction:
-  #         enabled: True
-  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo'
-  #         overlay_min_conf: 0.25  # (可選) BBox 最小可信度
-  #         overlay_nms_iou: 0.6   # (可選) BBox NMS IoU 閾值
-  #         overlay_alpha: 0.2     # (可選) 分割圖層的不透明度 (0.0-1.0)
-
-
-
-  # # ===================================================================
-  # # 實驗 3-1: 訓練 SAR patch 640 overlap 128 background keep 0%
-  # # ===================================================================
-  # - experiment_name: 'yolo(11n-seg)_SAR(epoch800-P640_O128_BGKeep0p)'
-  #   mode: 'train' 
-  #   run: True
-  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt' 
-  #   dataset:
-  #     path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P640_O128_BGKeep0p/SAR_2' # 相對於 data.yaml 的路徑
-  #     train: 'images/train'
-  #     val: 'images/val'
-  #     test: 'images/test'
-  #     nc: 1
-  #     names: ['oil']
-  #   epochs: 800
-  #   imgsz: 640
-  #   batch_size: 32
-  #   patience: 0 
-  #   eval_conf: 0.25
-  #   eval_iou: 0.6 # 設定驗證時的 NMS IoU
-
-  #   post_tests:
-  #     # 第一個後續測試：在它自己的 SAR 資料集上進行重組評估
-  #     - test_name: 'eval_SAR_reconstruction'
-  #       run: True
-  #       dataset:
-  #         path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P640_O128_BGKeep0p/SAR_2' 
-  #         train: 'images/train'
-  #         val: 'images/val'
-  #         test: 'images/test'
-  #         nc: 1
-  #         names: ['oil']
-  #       reconstruction:
-  #         # 這個測試也可以有自己獨立的重組設定
-  #         enabled: True
-  #         original_data_root: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2'
-  #         overlay_min_conf: 0.25  # (可選) BBox 最小可信度
-  #         overlay_nms_iou: 0.6   # (可選) BBox NMS IoU 閾值
-  #         overlay_alpha: 0.2     # (可選) 分割圖層的不透明度 (0.0-1.0)
-      
-  #     # 第二個後續測試：用同一個模型，去測試一個完全不同的 Zenodo 資料集
-  #     - test_name: 'eval_zenodo_reconstruction'
-  #       run: True
-  #       dataset: # dataset 可以和父實驗相同，也可以不同
-  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_patch/Patched_Data_P640_O128_BGKeep0p/zenodo'
-  #         train: 'images/train'
-  #         val: 'images/val'
-  #         test: 'images/test'
-  #         nc: 1
-  #         names: ['oil']
-  #       reconstruction:
-  #         enabled: True
-  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo'
-  #         overlay_min_conf: 0.25  # (可選) BBox 最小可信度
-  #         overlay_nms_iou: 0.6   # (可選) BBox NMS IoU 閾值
-  #         overlay_alpha: 0.2     # (可選) 分割圖層的不透明度 (0.0-1.0)
-
-
-
-
-  # # ===================================================================
-  # # 實驗 3-2: 訓練 SAR patch 640 overlap 128 background keep 10%
-  # # ===================================================================
-  # - experiment_name: 'yolo(11n-seg)_SAR(epoch800-P640_O128_BGKeep10p)'
-  #   mode: 'train' 
-  #   run: True
-  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt' 
-  #   dataset:
-  #     path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P640_O128_BGKeep10p/SAR_2' # 相對於 data.yaml 的路徑
-  #     train: 'images/train'
-  #     val: 'images/val'
-  #     test: 'images/test'
-  #     nc: 1
-  #     names: ['oil']
-  #   epochs: 800
-  #   imgsz: 640
-  #   batch_size: 32
-  #   patience: 0 
-  #   eval_conf: 0.25
-  #   eval_iou: 0.6 # 設定驗證時的 NMS IoU
-
-  #   post_tests:
-  #     # 第一個後續測試：在它自己的 SAR 資料集上進行重組評估
-  #     - test_name: 'eval_SAR_reconstruction'
-  #       run: True
-  #       dataset:
-  #         path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P640_O128_BGKeep10p/SAR_2' 
-  #         train: 'images/train'
-  #         val: 'images/val'
-  #         test: 'images/test'
-  #         nc: 1
-  #         names: ['oil']
-  #       reconstruction:
-  #         # 這個測試也可以有自己獨立的重組設定
-  #         enabled: True
-  #         original_data_root: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2'
-  #         overlay_min_conf: 0.25  # (可選) BBox 最小可信度
-  #         overlay_nms_iou: 0.6   # (可選) BBox NMS IoU 閾值
-  #         overlay_alpha: 0.2     # (可選) 分割圖層的不透明度 (0.0-1.0)
-      
-  #     # 第二個後續測試：用同一個模型，去測試一個完全不同的 Zenodo 資料集
-  #     - test_name: 'eval_zenodo_reconstruction'
-  #       run: True
-  #       dataset: # dataset 可以和父實驗相同，也可以不同
-  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_patch/Patched_Data_P640_O128_BGKeep10p/zenodo'
-  #         train: 'images/train'
-  #         val: 'images/val'
-  #         test: 'images/test'
-  #         nc: 1
-  #         names: ['oil']
-  #       reconstruction:
-  #         enabled: True
-  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo'
-  #         overlay_min_conf: 0.25  # (可選) BBox 最小可信度
-  #         overlay_nms_iou: 0.6   # (可選) BBox NMS IoU 閾值
-  #         overlay_alpha: 0.2     # (可選) 分割圖層的不透明度 (0.0-1.0)
-
-
-
-  # # ===================================================================
-  # # 實驗 3-3: 訓練 SAR patch 640 overlap 128 background keep 20%
-  # # ===================================================================
-  # - experiment_name: 'yolo(11n-seg)_SAR(epoch800-P640_O128_BGKeep20p)'
-  #   mode: 'train' 
-  #   run: True
-  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt' 
-  #   dataset:
-  #     path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P640_O128_BGKeep20p/SAR_2' # 相對於 data.yaml 的路徑
-  #     train: 'images/train'
-  #     val: 'images/val'
-  #     test: 'images/test'
-  #     nc: 1
-  #     names: ['oil']
-  #   epochs: 800
-  #   imgsz: 640
-  #   batch_size: 32
-  #   patience: 0 
-  #   eval_conf: 0.25
-  #   eval_iou: 0.6 # 設定驗證時的 NMS IoU
-
-  #   post_tests:
-  #     # 第一個後續測試：在它自己的 SAR 資料集上進行重組評估
-  #     - test_name: 'eval_SAR_reconstruction'
-  #       run: True
-  #       dataset:
-  #         path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P640_O128_BGKeep20p/SAR_2' 
-  #         train: 'images/train'
-  #         val: 'images/val'
-  #         test: 'images/test'
-  #         nc: 1
-  #         names: ['oil']
-  #       reconstruction:
-  #         # 這個測試也可以有自己獨立的重組設定
-  #         enabled: True
-  #         original_data_root: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2'
-  #         overlay_min_conf: 0.25  # (可選) BBox 最小可信度
-  #         overlay_nms_iou: 0.6   # (可選) BBox NMS IoU 閾值
-  #         overlay_alpha: 0.2     # (可選) 分割圖層的不透明度 (0.0-1.0)
-      
-  #     # 第二個後續測試：用同一個模型，去測試一個完全不同的 Zenodo 資料集
-  #     - test_name: 'eval_zenodo_reconstruction'
-  #       run: True
-  #       dataset: # dataset 可以和父實驗相同，也可以不同
-  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_patch/Patched_Data_P640_O128_BGKeep20p/zenodo'
-  #         train: 'images/train'
-  #         val: 'images/val'
-  #         test: 'images/test'
-  #         nc: 1
-  #         names: ['oil']
-  #       reconstruction:
-  #         enabled: True
-  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo'
-  #         overlay_min_conf: 0.25  # (可選) BBox 最小可信度
-  #         overlay_nms_iou: 0.6   # (可選) BBox NMS IoU 閾值
-  #         overlay_alpha: 0.2     # (可選) 分割圖層的不透明度 (0.0-1.0)
-
-
-
-  # # ===================================================================
-  # # 實驗 1: 訓練 SAR patch 1024 overlap 128 background keep 0%
-  # # ===================================================================
-  # - experiment_name: 'yolo(11n-seg)_SAR(epoch800-P1024_O128_BGKeep0p)'
-  #   mode: 'train' 
-  #   run: True
-  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt' 
-  #   dataset:
-  #     path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P1024_O128_BGKeep0p/SAR_2' # 相對於 data.yaml 的路徑
-  #     train: 'images/train'
-  #     val: 'images/val'
-  #     test: 'images/test'
-  #     nc: 1
-  #     names: ['oil']
-  #   epochs: 800
-  #   imgsz: 1024
-  #   batch_size: 32
-  #   patience: 0 
-  #   eval_conf: 0.25
-  #   eval_iou: 0.6 # 設定驗證時的 NMS IoU
-
-  #   post_tests:
-  #     # 第一個後續測試：在它自己的 SAR 資料集上進行重組評估
-  #     - test_name: 'eval_SAR_reconstruction'
-  #       run: True
-  #       dataset:
-  #         path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P1024_O128_BGKeep0p/SAR_2' 
-  #         train: 'images/train'
-  #         val: 'images/val'
-  #         test: 'images/test'
-  #         nc: 1
-  #         names: ['oil']
-  #       reconstruction:
-  #         # 這個測試也可以有自己獨立的重組設定
-  #         enabled: True
-  #         original_data_root: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2'
-  #         overlay_min_conf: 0.25  # (可選) BBox 最小可信度
-  #         overlay_nms_iou: 0.6   # (可選) BBox NMS IoU 閾值
-  #         overlay_alpha: 0.2     # (可選) 分割圖層的不透明度 (0.0-1.0)
-      
-  #     # 第二個後續測試：用同一個模型，去測試一個完全不同的 Zenodo 資料集
-  #     - test_name: 'eval_zenodo_reconstruction'
-  #       run: True
-  #       dataset: # dataset 可以和父實驗相同，也可以不同
-  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_patch/Patched_Data_P1024_O128_BGKeep0p/zenodo'
-  #         train: 'images/train'
-  #         val: 'images/val'
-  #         test: 'images/test'
-  #         nc: 1
-  #         names: ['oil']
-  #       reconstruction:
-  #         enabled: True
-  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo'
-  #         overlay_min_conf: 0.25  # (可選) BBox 最小可信度
-  #         overlay_nms_iou: 0.6   # (可選) BBox NMS IoU 閾值
-  #         overlay_alpha: 0.2     # (可選) 分割圖層的不透明度 (0.0-1.0)
-
-      
-      
-  # # ===================================================================
-  # # 實驗 2: 訓練 SAR patch 256 overlap 128 background keep 0%
-  # # ===================================================================
-  # - experiment_name: 'yolo(11n-seg)_SAR(epoch800-P256_O128_BGKeep0p)'
-  #   mode: 'train' 
-  #   run: True
-  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt' 
-  #   dataset:
-  #     path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P256_O128_BGKeep0p/SAR_2' # 相對於 data.yaml 的路徑
-  #     train: 'images/train'
-  #     val: 'images/val'
-  #     test: 'images/test'
-  #     nc: 1
-  #     names: ['oil']
-  #   epochs: 800
-  #   imgsz: 256
-  #   batch_size: 32
-  #   patience: 0 
-  #   eval_conf: 0.25
-  #   eval_iou: 0.6 # 設定驗證時的 NMS IoU
-
-  #   post_tests:
-  #     # 第一個後續測試：在它自己的 SAR 資料集上進行重組評估
-  #     - test_name: 'eval_SAR_reconstruction'
-  #       run: True
-  #       dataset:
-  #         path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P256_O128_BGKeep0p/SAR_2' 
-  #         train: 'images/train'
-  #         val: 'images/val'
-  #         test: 'images/test'
-  #         nc: 1
-  #         names: ['oil']
-  #       reconstruction:
-  #         # 這個測試也可以有自己獨立的重組設定
-  #         enabled: True
-  #         original_data_root: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2'
-  #         overlay_min_conf: 0.25  # (可選) BBox 最小可信度
-  #         overlay_nms_iou: 0.6   # (可選) BBox NMS IoU 閾值
-  #         overlay_alpha: 0.2     # (可選) 分割圖層的不透明度 (0.0-1.0)
-      
-  #     # 第二個後續測試：用同一個模型，去測試一個完全不同的 Zenodo 資料集
-  #     - test_name: 'eval_zenodo_reconstruction'
-  #       run: True
-  #       dataset: # dataset 可以和父實驗相同，也可以不同
-  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_patch/Patched_Data_P256_O128_BGKeep0p/zenodo'
-  #         train: 'images/train'
-  #         val: 'images/val'
-  #         test: 'images/test'
-  #         nc: 1
-  #         names: ['oil']
-  #       reconstruction:
-  #         enabled: True
-  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo'
-  #         overlay_min_conf: 0.25  # (可選) BBox 最小可信度
-  #         overlay_nms_iou: 0.6   # (可選) BBox NMS IoU 閾值
-  #         overlay_alpha: 0.2     # (可選) 分割圖層的不透明度 (0.0-1.0)
-
-
-
-  # # ===================================================================
-  # # 實驗 3-1: 訓練 SAR patch 640 overlap 128 background keep 0%
-  # # ===================================================================
-  # - experiment_name: 'yolo(11n-seg)_SAR(epoch800-P640_O128_BGKeep0p)'
-  #   mode: 'train' 
-  #   run: True
-  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt' 
-  #   dataset:
-  #     path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P640_O128_BGKeep0p/SAR_2' # 相對於 data.yaml 的路徑
-  #     train: 'images/train'
-  #     val: 'images/val'
-  #     test: 'images/test'
-  #     nc: 1
-  #     names: ['oil']
-  #   epochs: 800
-  #   imgsz: 640
-  #   batch_size: 32
-  #   patience: 0 
-  #   eval_conf: 0.25
-  #   eval_iou: 0.6 # 設定驗證時的 NMS IoU
-
-  #   post_tests:
-  #     # 第一個後續測試：在它自己的 SAR 資料集上進行重組評估
-  #     - test_name: 'eval_SAR_reconstruction'
-  #       run: True
-  #       dataset:
-  #         path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P640_O128_BGKeep0p/SAR_2' 
-  #         train: 'images/train'
-  #         val: 'images/val'
-  #         test: 'images/test'
-  #         nc: 1
-  #         names: ['oil']
-  #       reconstruction:
-  #         # 這個測試也可以有自己獨立的重組設定
-  #         enabled: True
-  #         original_data_root: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2'
-  #         overlay_min_conf: 0.25  # (可選) BBox 最小可信度
-  #         overlay_nms_iou: 0.6   # (可選) BBox NMS IoU 閾值
-  #         overlay_alpha: 0.2     # (可選) 分割圖層的不透明度 (0.0-1.0)
-      
-  #     # 第二個後續測試：用同一個模型，去測試一個完全不同的 Zenodo 資料集
-  #     - test_name: 'eval_zenodo_reconstruction'
-  #       run: True
-  #       dataset: # dataset 可以和父實驗相同，也可以不同
-  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_patch/Patched_Data_P640_O128_BGKeep0p/zenodo'
-  #         train: 'images/train'
-  #         val: 'images/val'
-  #         test: 'images/test'
-  #         nc: 1
-  #         names: ['oil']
-  #       reconstruction:
-  #         enabled: True
-  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo'
-  #         overlay_min_conf: 0.25  # (可選) BBox 最小可信度
-  #         overlay_nms_iou: 0.6   # (可選) BBox NMS IoU 閾值
-  #         overlay_alpha: 0.2     # (可選) 分割圖層的不透明度 (0.0-1.0)
-
-
-
-
-  # # ===================================================================
-  # # 實驗 3-2: 訓練 SAR patch 640 overlap 128 background keep 10%
-  # # ===================================================================
-  # - experiment_name: 'yolo(11n-seg)_SAR(epoch800-P640_O128_BGKeep10p)'
-  #   mode: 'train' 
-  #   run: True
-  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt' 
-  #   dataset:
-  #     path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P640_O128_BGKeep10p/SAR_2' # 相對於 data.yaml 的路徑
-  #     train: 'images/train'
-  #     val: 'images/val'
-  #     test: 'images/test'
-  #     nc: 1
-  #     names: ['oil']
-  #   epochs: 800
-  #   imgsz: 640
-  #   batch_size: 32
-  #   patience: 0 
-  #   eval_conf: 0.25
-  #   eval_iou: 0.6 # 設定驗證時的 NMS IoU
-
-  #   post_tests:
-  #     # 第一個後續測試：在它自己的 SAR 資料集上進行重組評估
-  #     - test_name: 'eval_SAR_reconstruction'
-  #       run: True
-  #       dataset:
-  #         path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P640_O128_BGKeep10p/SAR_2' 
-  #         train: 'images/train'
-  #         val: 'images/val'
-  #         test: 'images/test'
-  #         nc: 1
-  #         names: ['oil']
-  #       reconstruction:
-  #         # 這個測試也可以有自己獨立的重組設定
-  #         enabled: True
-  #         original_data_root: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2'
-  #         overlay_min_conf: 0.25  # (可選) BBox 最小可信度
-  #         overlay_nms_iou: 0.6   # (可選) BBox NMS IoU 閾值
-  #         overlay_alpha: 0.2     # (可選) 分割圖層的不透明度 (0.0-1.0)
-      
-  #     # 第二個後續測試：用同一個模型，去測試一個完全不同的 Zenodo 資料集
-  #     - test_name: 'eval_zenodo_reconstruction'
-  #       run: True
-  #       dataset: # dataset 可以和父實驗相同，也可以不同
-  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_patch/Patched_Data_P640_O128_BGKeep10p/zenodo'
-  #         train: 'images/train'
-  #         val: 'images/val'
-  #         test: 'images/test'
-  #         nc: 1
-  #         names: ['oil']
-  #       reconstruction:
-  #         enabled: True
-  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo'
-  #         overlay_min_conf: 0.25  # (可選) BBox 最小可信度
-  #         overlay_nms_iou: 0.6   # (可選) BBox NMS IoU 閾值
-  #         overlay_alpha: 0.2     # (可選) 分割圖層的不透明度 (0.0-1.0)
-
-
-
-  # # ===================================================================
-  # # 實驗 3-3: 訓練 SAR patch 640 overlap 128 background keep 20%
-  # # ===================================================================
-  # - experiment_name: 'yolo(11n-seg)_SAR(epoch800-P640_O128_BGKeep20p)'
-  #   mode: 'train' 
-  #   run: True
-  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt' 
-  #   dataset:
-  #     path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P640_O128_BGKeep20p/SAR_2' # 相對於 data.yaml 的路徑
-  #     train: 'images/train'
-  #     val: 'images/val'
-  #     test: 'images/test'
-  #     nc: 1
-  #     names: ['oil']
-  #   epochs: 800
-  #   imgsz: 640
-  #   batch_size: 32
-  #   patience: 0 
-  #   eval_conf: 0.25
-  #   eval_iou: 0.6 # 設定驗證時的 NMS IoU
-
-  #   post_tests:
-  #     # 第一個後續測試：在它自己的 SAR 資料集上進行重組評估
-  #     - test_name: 'eval_SAR_reconstruction'
-  #       run: True
-  #       dataset:
-  #         path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P640_O128_BGKeep20p/SAR_2' 
-  #         train: 'images/train'
-  #         val: 'images/val'
-  #         test: 'images/test'
-  #         nc: 1
-  #         names: ['oil']
-  #       reconstruction:
-  #         # 這個測試也可以有自己獨立的重組設定
-  #         enabled: True
-  #         original_data_root: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2'
-  #         overlay_min_conf: 0.25  # (可選) BBox 最小可信度
-  #         overlay_nms_iou: 0.6   # (可選) BBox NMS IoU 閾值
-  #         overlay_alpha: 0.2     # (可選) 分割圖層的不透明度 (0.0-1.0)
-      
-  #     # 第二個後續測試：用同一個模型，去測試一個完全不同的 Zenodo 資料集
-  #     - test_name: 'eval_zenodo_reconstruction'
-  #       run: True
-  #       dataset: # dataset 可以和父實驗相同，也可以不同
-  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_patch/Patched_Data_P640_O128_BGKeep20p/zenodo'
-  #         train: 'images/train'
-  #         val: 'images/val'
-  #         test: 'images/test'
-  #         nc: 1
-  #         names: ['oil']
-  #       reconstruction:
-  #         enabled: True
-  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo'
-  #         overlay_min_conf: 0.25  # (可選) BBox 最小可信度
-  #         overlay_nms_iou: 0.6   # (可選) BBox NMS IoU 閾值
-  #         overlay_alpha: 0.2     # (可選) 分割圖層的不透明度 (0.0-1.0)  # 
-  
-  # ####################################################################
-  
-  # # ===================================================================
-  # # 實驗 4: 訓練 zenodo patch 1024 overlap 128 background keep 0%
-  # # ===================================================================
-  # - experiment_name: 'yolo(11n-seg)_zenodo(epoch800-P1024_O128_BGKeep0p)'
-  #   mode: 'train' 
-  #   run: True
-  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt' 
-  #   dataset:
-  #     path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_patch/Patched_Data_P1024_O128_BGKeep0p/zenodo' # 相對於 data.yaml 的路徑
-  #   epochs: 800
-  #   imgsz: 1024
-  #   batch_size: 32
-  #   patience: 0 
-
-  #   post_tests:
-  #     # 第1個測試：自己的 Zenodo 資料集上進行重組評估
-  #     - test_name: 'eval_zenodo_reconstruction'
-  #       run: True
-  #       dataset: # dataset 可以和父實驗相同，也可以不同
-  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_patch/Patched_Data_P1024_O128_BGKeep0p/zenodo'
-  #       reconstruction:
-  #         enabled: True
-  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo'
-  #     # 第2個測試：用同一個模型，去測試一個完全不同的 SAR 資料集 
-  #     - test_name: 'eval_SAR_reconstruction'
-  #       run: True
-  #       dataset:
-  #         path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P1024_O128_BGKeep0p/SAR_2' 
-  #       reconstruction:
-  #         # 這個測試也可以有自己獨立的重組設定
-  #         enabled: True
-  #         original_data_root: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2'
-      
-
-
-      
-      
-  # # ===================================================================
-  # # 實驗 5: 訓練 zenodo patch 256 overlap 128 background keep 0%
-  # # ===================================================================
-  # - experiment_name: 'yolo(11n-seg)_zenodo(epoch800-P256_O128_BGKeep0p)'
-  #   mode: 'train' 
-  #   run: True
-  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt' 
-  #   dataset:
-  #     path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_patch/Patched_Data_P256_O128_BGKeep0p/zenodo' # 相對於 data.yaml 的路徑
-  #   epochs: 800
-  #   imgsz: 256
-  #   batch_size: 32
-  #   patience: 0 
-  #   eval_conf: 0.25
-  #   eval_iou: 0.6 # 設定驗證時的 NMS IoU
-
-  #   post_tests:
-  #     # 第一個後續測試：在它自己的 zenodo 資料集上進行重組評估
-  #     - test_name: 'eval_zenodo_reconstruction'
-  #       run: True
-  #       dataset: # dataset 可以和父實驗相同，也可以不同
-  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_patch/Patched_Data_P256_O128_BGKeep0p/zenodo'
-  #       reconstruction:
-  #         enabled: True
-  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo'
-
-  #     # 第二個後續測試：用同一個模型，去測試一個完全不同的 SAR 資料集 
-  #     - test_name: 'eval_SAR_reconstruction'
-  #       run: True
-  #       dataset:
-  #         path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P256_O128_BGKeep0p/SAR_2' 
-  #       reconstruction:
-  #         # 這個測試也可以有自己獨立的重組設定
-  #         enabled: True
-  #         original_data_root: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2'
-
-
-
-
-
-  # # 需要重新測量，因為少了評估指標
-  #   # ===================================================================
-  # # 實驗 1: 重新訓練加評估結果。 SAR(epoch800-P1024_O128_BGKeep0p)
-  # # ===================================================================
-  # - experiment_name: 'yolo(11n-seg)_SAR(epoch800-P1024_O128_BGKeep0p)'
-  #   mode: 'test' 
-  #   base_model: '/home/yuan/OIL_PROJECT/result/20250702-171606_yolo(11n-seg)_SAR(epoch800-P1024_O128_BGKeep0p)/weights/best.pt' 
-  #   dataset:
-  #     path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P1024_O128_BGKeep0p/SAR_2' 
-  #   epochs: 800
-  #   imgsz: 1024
-  #   batch_size: 32
-  #   patience: 0 
-  #   eval_conf: 0.25
-  #   eval_iou: 0.6 
-
-  #   post_tests:
-  #     # 第一個後續測試：自己 SAR 資料集上 重組評估
-  #     - test_name: 'eval_DV2-SAR_reconstruction'
-  #       dataset: 
-  #         path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P1024_O128_BGKeep0p/SAR_2' 
-  #       reconstruction:
-  #         enabled: True
-  #         original_data_root: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2'
-
-  #     # 第二個後續測試：用同一個模型，去測試不同的 Zenodo 資料集 
-  #     - test_name: 'eval_Zenodo_reconstruction'
-  #       dataset:
-  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_patch/Patched_Data_P1024_O128_BGKeep0p/zenodo' 
-  #       reconstruction:
-  #         enabled: True
-  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo'
-
-
-
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  # # ===================================================================
-  # # 實驗 1: DV2-SAR(P1024_O128_BGKeep0p)
-  # # ===================================================================
-  # - experiment_name: 'yolo(11n-seg)_DV2-SAR(P1024_O128_BGKeep0p)'
-  #   mode: 'train' 
-  #   base_model: '/home/yuan/OIL_PROJECT/code/main/yolo11n-seg.pt' 
-  #   dataset:
-  #     path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P1024_O128_BGKeep0p/SAR_2' 
-  #   epochs: 800
-  #   imgsz: 1024
-  #   batch_size: 32
-  #   patience: 0 
-  #   post_tests:
-  #     # 第一個後續測試：自己 SAR 資料集上 重組評估
-  #     - test_name: 'eval_DV2-SAR_reconstruction'
-  #       dataset: 
-  #         path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P1024_O128_BGKeep0p/SAR_2' 
-  #       reconstruction:
-  #         enabled: True
-  #         original_data_root: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2'
-
-  #     # 第二個後續測試：用同一個模型，去測試不同的 Zenodo 資料集 
-  #     - test_name: 'eval_Zenodo_reconstruction'
-  #       dataset:
-  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_patch/Patched_Data_P1024_O128_BGKeep0p/zenodo' 
-  #       reconstruction:
-  #         enabled: True
-  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo'
-
-  # # ===================================================================
-  # # 實驗 2: DV2-SAR(P256_O128_BGKeep0p)
-  # # ===================================================================
-  # - experiment_name: 'yolo(11n-seg)_DV2-SAR(P256_O128_BGKeep0p)'
-  #   mode: 'train' 
-  #   base_model: '/home/yuan/OIL_PROJECT/code/main/yolo11n-seg.pt' 
-  #   dataset:
-  #     path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P256_O128_BGKeep0p/SAR_2' 
-  #   epochs: 800
-  #   imgsz: 256
-  #   batch_size: 32
-  #   patience: 0 
-  #   post_tests:
-  #     # 第一個後續測試：自己 SAR 資料集上 重組評估
-  #     - test_name: 'eval_DV2-SAR_reconstruction'
-  #       dataset: 
-  #         path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P256_O128_BGKeep0p/SAR_2' 
-  #       reconstruction:
-  #         enabled: True
-  #         original_data_root: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2'
-
-  #     # 第二個後續測試：用同一個模型，去測試不同的 Zenodo 資料集 
-  #     - test_name: 'eval_Zenodo_reconstruction'
-  #       dataset:
-  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_patch/Patched_Data_P256_O128_BGKeep0p/zenodo' 
-  #       reconstruction:
-  #         enabled: True
-  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo'
-
-  # # ===================================================================
-  # # 實驗 3-1: DV2-SAR(P640_O128_BGKeep0p)
-  # # ===================================================================
-  # - experiment_name: 'yolo(11n-seg)_DV2-SAR(P640_O128_BGKeep0p)'
-  #   mode: 'train' 
-  #   base_model: '/home/yuan/OIL_PROJECT/code/main/yolo11n-seg.pt' 
-  #   dataset:
-  #     path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P640_O128_BGKeep0p/SAR_2' 
-  #   epochs: 800
-  #   imgsz: 640
-  #   batch_size: 32
-  #   patience: 0 
-  #   post_tests:
-  #     # 第一個後續測試：自己 SAR 資料集上 重組評估
-  #     - test_name: 'eval_DV2-SAR_reconstruction'
-  #       dataset: 
-  #         path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P640_O128_BGKeep0p/SAR_2' 
-  #       reconstruction:
-  #         enabled: True
-  #         original_data_root: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2'
-
-  #     # 第二個後續測試：用同一個模型，去測試不同的 Zenodo 資料集 
-  #     - test_name: 'eval_Zenodo_reconstruction'
-  #       dataset:
-  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_patch/Patched_Data_P640_O128_BGKeep0p/zenodo' 
-  #       reconstruction:
-  #         enabled: True
-  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo'
-
-
-  # # ===================================================================
-  # # 實驗 3-2: DV2-SAR(P640_O128_BGKeep10p)
-  # # ===================================================================
-  # - experiment_name: 'yolo(11n-seg)_DV2-SAR(P640_O128_BGKeep10p)'
-  #   mode: 'train' 
-  #   base_model: '/home/yuan/OIL_PROJECT/code/main/yolo11n-seg.pt' 
-  #   dataset:
-  #     path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P640_O128_BGKeep10p/SAR_2' 
-  #   epochs: 800
-  #   imgsz: 640
-  #   batch_size: 32
-  #   patience: 0 
-  #   post_tests:
-  #     # 第一個後續測試：自己 SAR 資料集上 重組評估
-  #     - test_name: 'eval_DV2-SAR_reconstruction'
-  #       dataset: 
-  #         path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P640_O128_BGKeep10p/SAR_2' 
-  #       reconstruction:
-  #         enabled: True
-  #         original_data_root: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2'
-
-  #     # 第二個後續測試：用同一個模型，去測試不同的 Zenodo 資料集 
-  #     - test_name: 'eval_Zenodo_reconstruction'
-  #       dataset:
-  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_patch/Patched_Data_P640_O128_BGKeep10p/zenodo' 
-  #       reconstruction:
-  #         enabled: True
-  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo'
-
-  # # ===================================================================
-  # # 實驗 3-3: DV2-SAR(P640_O128_BGKeep20p)
-  # # ===================================================================
-  # - experiment_name: 'yolo(11n-seg)_DV2-SAR(P640_O128_BGKeep20p)'
-  #   mode: 'train' 
-  #   base_model: '/home/yuan/OIL_PROJECT/code/main/yolo11n-seg.pt' 
-  #   dataset:
-  #     path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P640_O128_BGKeep20p/SAR_2' 
-  #   epochs: 800
-  #   imgsz: 640
-  #   batch_size: 32
-  #   patience: 0 
-  #   post_tests:
-  #     # 第一個後續測試：自己 SAR 資料集上 重組評估
-  #     - test_name: 'eval_DV2-SAR_reconstruction'
-  #       dataset: 
-  #         path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P640_O128_BGKeep20p/SAR_2' 
-  #       reconstruction:
-  #         enabled: True
-  #         original_data_root: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2'
-
-  #     # 第二個後續測試：用同一個模型，去測試不同的 Zenodo 資料集 
-  #     - test_name: 'eval_Zenodo_reconstruction'
-  #       dataset:
-  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_patch/Patched_Data_P640_O128_BGKeep20p/zenodo' 
-  #       reconstruction:
-  #         enabled: True
-  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo'
-
-
-
-
-  # # ===================================================================
-  # # 實驗 4-1: Zenodo(P640_O128_BGKeep0p)
-  # # ===================================================================
-  # - experiment_name: 'yolo(11n-seg)_Zenodo(P640_O128_BGKeep0p)'
-  #   mode: 'train' 
-  #   base_model: '/home/yuan/OIL_PROJECT/code/main/yolo11n-seg.pt' 
-  #   dataset:
-  #     path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_patch/Patched_Data_P640_O128_BGKeep0p/zenodo' 
-  #   epochs: 800
-  #   imgsz: 640
-  #   batch_size: 32
-  #   patience: 500 
-  #   post_tests:
-  #     # 第一個後續測試：自己 Zenodo 資料集上 重組評估
-  #     - test_name: 'eval_Zenodo_reconstruction'
-  #       dataset:
-  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_patch/Patched_Data_P640_O128_BGKeep0p/zenodo' 
-  #       reconstruction:
-  #         enabled: True
-  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo'
-  #     # 第二個後續測試：用同一個模型，去測試不同的 SAR 資料集 
-  #     - test_name: 'eval_DV2-SAR_reconstruction'
-  #       dataset: 
-  #         path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P640_O128_BGKeep0p/SAR_2' 
-  #       reconstruction:
-  #         enabled: True
-  #         original_data_root: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2'
-
-  # # ===================================================================
-  # # 實驗 4-2: Zenodo(P640_O128_BGKeep0p) finetune DV2-SAR(P640_O128_BGKeep0p)
-  # # ===================================================================
-  # - experiment_name: 'yolo(11n-seg)_Zenodo(P640_O128_BGKeep0p)_finetune_DV2-SAR(P640_O128_BGKeep0p)'
-  #   mode: 'train' 
-  #   base_model: '{{yolo(11n-seg)_Zenodo(P640_O128_BGKeep0p)}}/weights/best.pt' 
-  #   dataset:
-  #     path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P640_O128_BGKeep0p/SAR_2' 
-  #   epochs: 800
-  #   imgsz: 640
-  #   batch_size: 32
-  #   patience: 0 
-  #   post_tests:
-  #     # 第一個後續測試：自己 SAR 資料集上 重組評估
-  #     - test_name: 'eval_DV2-SAR_reconstruction'
-  #       dataset: 
-  #         path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P640_O128_BGKeep0p/SAR_2' 
-  #       reconstruction:
-  #         enabled: True
-  #         original_data_root: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2'
-
-  #     # 第二個後續測試：用同一個模型，去測試不同的 Zenodo 資料集 
-  #     - test_name: 'eval_Zenodo_reconstruction'
-  #       dataset:
-  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_patch/Patched_Data_P640_O128_BGKeep0p/zenodo' 
-  #       reconstruction:
-  #         enabled: True
-  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo'
-
-  
-
-
-
-  # # # ===================================================================
-  # # # 實驗 4-3: Zenodo(P640_O128_BGKeep10p)
-  # # # ===================================================================
-  # # - experiment_name: 'yolo(11n-seg)_Zenodo(P640_O128_BGKeep10p)'
-  # #   mode: 'train' 
-  # #   base_model: '/home/yuan/OIL_PROJECT/code/main/yolo11n-seg.pt' 
-  # #   dataset:
-  # #     path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_patch/Patched_Data_P640_O128_BGKeep10p/zenodo' 
-  # #   epochs: 800
-  # #   imgsz: 640
-  # #   batch_size: 32
-  # #   patience: 500 
-  # #   post_tests:
-  # #     # 第一個後續測試：自己 Zenodo 資料集上 重組評估
-  # #     - test_name: 'eval_Zenodo_reconstruction'
-  # #       dataset:
-  # #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_patch/Patched_Data_P640_O128_BGKeep10p/zenodo' 
-  # #       reconstruction:
-  # #         enabled: True
-  # #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo'
-  # #     # 第二個後續測試：用同一個模型，去測試不同的 SAR 資料集 
-  # #     - test_name: 'eval_DV2-SAR_reconstruction'
-  # #       dataset: 
-  # #         path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P640_O128_BGKeep10p/SAR_2' 
-  # #       reconstruction:
-  # #         enabled: True
-  # #         original_data_root: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2'
-
-  # # ===================================================================
-  # # 實驗 4-4: Zenodo(P640_O128_BGKeep10p) finetune DV2-SAR(P640_O128_BGKeep10p)
-  # # ===================================================================
-  # - experiment_name: 'yolo(11n-seg)_Zenodo(P640_O128_BGKeep10p)_finetune_DV2-SAR(P640_O128_BGKeep10p)'
-  #   mode: 'train' 
-  #   base_model: '/home/yuan/OIL_PROJECT/result/20250705-055653_yolo(11n-seg)_Zenodo(P640_O128_BGKeep10p)/weights/best.pt'  # '{{yolo(11n-seg)_Zenodo(P640_O128_BGKeep10p)}}/weights/best.pt' 
-  #   dataset:
-  #     path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P640_O128_BGKeep10p/SAR_2' 
-  #   epochs: 800
-  #   imgsz: 640
-  #   batch_size: 32
-  #   patience: 0 
-  #   post_tests:
-  #     # 第一個後續測試：自己 SAR 資料集上 重組評估
-  #     - test_name: 'eval_DV2-SAR_reconstruction'
-  #       dataset: 
-  #         path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P640_O128_BGKeep10p/SAR_2' 
-  #       reconstruction:
-  #         enabled: True
-  #         original_data_root: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2'
-
-  #     # 第二個後續測試：用同一個模型，去測試不同的 Zenodo 資料集 
-  #     - test_name: 'eval_Zenodo_reconstruction'
-  #       dataset:
-  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_patch/Patched_Data_P640_O128_BGKeep10p/zenodo' 
-  #       reconstruction:
-  #         enabled: True
-  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo'
-  
-
-
-
-  # # ===================================================================
-  # # 實驗 4-5: Zenodo(P640_O128_BGKeep20p)
-  # # ===================================================================
-  # - experiment_name: 'yolo(11n-seg)_Zenodo(P640_O128_BGKeep20p)'
-  #   mode: 'train' 
-  #   base_model: '/home/yuan/OIL_PROJECT/code/main/yolo11n-seg.pt' 
-  #   dataset:
-  #     path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_patch/Patched_Data_P640_O128_BGKeep20p/zenodo' 
-  #   epochs: 800
-  #   imgsz: 640
-  #   batch_size: 32
-  #   patience: 150 
-  #   post_tests:
-  #     # 第一個後續測試：自己 Zenodo 資料集上 重組評估
-  #     - test_name: 'eval_Zenodo_reconstruction'
-  #       dataset:
-  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_patch/Patched_Data_P640_O128_BGKeep20p/zenodo' 
-  #       reconstruction:
-  #         enabled: True
-  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo'
-  #     # 第二個後續測試：用同一個模型，去測試不同的 SAR 資料集 
-  #     - test_name: 'eval_DV2-SAR_reconstruction'
-  #       dataset: 
-  #         path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P640_O128_BGKeep20p/SAR_2' 
-  #       reconstruction:
-  #         enabled: True
-  #         original_data_root: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2'
-
-  # # ===================================================================
-  # # 實驗 4-6: Zenodo(P640_O128_BGKeep20p) finetune DV2-SAR(P640_O128_BGKeep20p)
-  # # ===================================================================
-  # - experiment_name: 'yolo(11n-seg)_Zenodo(P640_O128_BGKeep20p)_finetune_DV2-SAR(P640_O128_BGKeep20p)'
-  #   mode: 'train' 
-  #   base_model: '{{yolo(11n-seg)_Zenodo(P640_O128_BGKeep20p)}}/weights/best.pt' 
-  #   dataset:
-  #     path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P640_O128_BGKeep20p/SAR_2' 
-  #   epochs: 800
-  #   imgsz: 640
-  #   batch_size: 32
-  #   patience: 0 
-  #   post_tests:
-  #     # 第一個後續測試：自己 SAR 資料集上 重組評估
-  #     - test_name: 'eval_DV2-SAR_reconstruction'
-  #       dataset: 
-  #         path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_Patch/Patched_Data_P640_O128_BGKeep20p/SAR_2' 
-  #       reconstruction:
-  #         enabled: True
-  #         original_data_root: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2'
-
-  #     # 第二個後續測試：用同一個模型，去測試不同的 Zenodo 資料集 
-  #     - test_name: 'eval_Zenodo_reconstruction'
-  #       dataset:
-  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_patch/Patched_Data_P640_O128_BGKeep20p/zenodo' 
-  #       reconstruction:
-  #         enabled: True
-  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo'
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   # # 重新測試階段，由於之前的重組評估指標計算方法錯誤，因此需要重測
   # # ===================================================================
@@ -3055,60 +1879,116 @@ experiments:
   ########################################################################################################
   ########################################################################################################
   ########################################################################################################
-  # ===================================================================
-  - experiment_name: 'DV2-SAR(P640_BGK20)-(patch_png)'
-    mode: 'train' 
-    base_model: '/home/yuan/OIL_PROJECT/code/main/yolo11n-seg.pt' 
-    dataset:
-      path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_PNG_relabel_rearrange_Patch-png/Patched_P640_O128_BG20p/SAR_2_PNG_relabel_rearrange' 
-    epochs: 800
-    imgsz: 640
-    batch_size: 128
-    patience: 0
-    cls_weight: 0.5 
-    post_tests:
-      - test_name: 'DV2-SAR' 
-        dataset: 
-          path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_PNG_relabel_rearrange_Patch-png/Patched_P640_O128_BG20p/SAR_2_PNG_relabel_rearrange' 
-        reconstruction:
-          enabled: True
-          original_data_root: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_PNG_relabel_rearrange'
+  # # ===================================================================
+  # - experiment_name: 'DV2-SAR(P640_BGK20)-(patch_png)'
+  #   mode: 'train' 
+  #   base_model: '/home/yuan/OIL_PROJECT/code/main/yolo11n-seg.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_PNG_relabel_rearrange_Patch-png/Patched_P640_O128_BG20p/SAR_2_PNG_relabel_rearrange' 
+  #   epochs: 800
+  #   imgsz: 640
+  #   batch_size: 128
+  #   patience: 0
+  #   cls_weight: 0.5 
+  #   post_tests:
+  #     - test_name: 'DV2-SAR' 
+  #       dataset: 
+  #         path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_PNG_relabel_rearrange_Patch-png/Patched_P640_O128_BG20p/SAR_2_PNG_relabel_rearrange' 
+  #       reconstruction:
+  #         enabled: True
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_PNG_relabel_rearrange'
 
-  - experiment_name: 'DV2-SAR(P1024_BGK20)-(patch_png)'
-    mode: 'train' 
-    base_model: '/home/yuan/OIL_PROJECT/code/main/yolo11n-seg.pt' 
-    dataset:
-      path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_PNG_relabel_rearrange_Patch-png/Patched_P1024_O128_BG20p/SAR_2_PNG_relabel_rearrange' 
-    epochs: 800
-    imgsz: 1024
-    batch_size: 64
-    patience: 0
-    cls_weight: 0.5 
-    post_tests:
-      - test_name: 'DV2-SAR' 
-        dataset: 
-          path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_PNG_relabel_rearrange_Patch-png/Patched_P1024_O128_BG20p/SAR_2_PNG_relabel_rearrange' 
-        reconstruction:
-          enabled: True
-          original_data_root: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_PNG_relabel_rearrange'
+  # - experiment_name: 'DV2-SAR(P1024_BGK20)-(patch_png)'
+  #   mode: 'train' 
+  #   base_model: '/home/yuan/OIL_PROJECT/code/main/yolo11n-seg.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_PNG_relabel_rearrange_Patch-png/Patched_P1024_O128_BG20p/SAR_2_PNG_relabel_rearrange' 
+  #   epochs: 800
+  #   imgsz: 1024
+  #   batch_size: 64
+  #   patience: 0
+  #   cls_weight: 0.5 
+  #   post_tests:
+  #     - test_name: 'DV2-SAR' 
+  #       dataset: 
+  #         path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_PNG_relabel_rearrange_Patch-png/Patched_P1024_O128_BG20p/SAR_2_PNG_relabel_rearrange' 
+  #       reconstruction:
+  #         enabled: True
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_PNG_relabel_rearrange'
 
-  - experiment_name: 'Zenodo-3type(P640_BGK20)-(patch_png)'
-    mode: 'train' 
-    base_model: '/home/yuan/OIL_PROJECT/code/main/yolo11n-seg.pt' 
-    dataset:
-      path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_original_all_classes_patch_png/Patched_P640_O128_BG20p/zenodo_original_all_classes' 
-    epochs: 800
-    imgsz: 640
-    batch_size: 128
-    patience: 300
-    cls_weight: 0.5 
-    post_tests:
-      - test_name: 'Zenodo' 
-        dataset: 
-          path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_original_all_classes_patch_png/Patched_P640_O128_BG20p/zenodo_original_all_classes' 
-        reconstruction:
-          enabled: True
-          original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_original_all_classes'
+  # - experiment_name: 'Zenodo-3type(P640_BGK20)-(patch_png)'
+  #   mode: 'train' 
+  #   base_model: '/home/yuan/OIL_PROJECT/code/main/yolo11n-seg.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_original_all_classes_patch_png/Patched_P640_O128_BG20p/zenodo_original_all_classes' 
+  #   epochs: 800
+  #   imgsz: 640
+  #   batch_size: 128
+  #   patience: 300
+  #   cls_weight: 0.5 
+  #   post_tests:
+  #     - test_name: 'Zenodo' 
+  #       dataset: 
+  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_original_all_classes_patch_png/Patched_P640_O128_BG20p/zenodo_original_all_classes' 
+  #       reconstruction:
+  #         enabled: True
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_original_all_classes'
+
+  # # ===================================================================
+  # - experiment_name: 'DV2-SAR(P640_BGK20)-(patch_png)'
+  #   mode: 'test' 
+  #   base_model: '/home/yuan/OIL_PROJECT/result-rearrange-png/20250808-074146_DV2-SAR(P640_BGK20)-(patch_png)/weights/best.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_PNG_relabel_rearrange_Patch-png/Patched_P640_O128_BG20p/SAR_2_PNG_relabel_rearrange' 
+  #   epochs: 800
+  #   imgsz: 640
+  #   batch_size: 128
+  #   patience: 0
+  #   cls_weight: 0.5 
+  #   post_tests:
+  #     - test_name: 'DV2-SAR' 
+  #       dataset: 
+  #         path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_PNG_relabel_rearrange_Patch-png/Patched_P640_O128_BG20p/SAR_2_PNG_relabel_rearrange' 
+  #       reconstruction:
+  #         enabled: True
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_PNG_relabel_rearrange'
+
+  # - experiment_name: 'DV2-SAR(P1024_BGK20)-(patch_png)'
+  #   mode: 'test' 
+  #   base_model: '/home/yuan/OIL_PROJECT/result-rearrange-png/20250808-092937_DV2-SAR(P1024_BGK20)-(patch_png)/weights/best.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_PNG_relabel_rearrange_Patch-png/Patched_P1024_O128_BG20p/SAR_2_PNG_relabel_rearrange' 
+  #   epochs: 800
+  #   imgsz: 1024
+  #   batch_size: 64
+  #   patience: 0
+  #   cls_weight: 0.5 
+  #   post_tests:
+  #     - test_name: 'DV2-SAR' 
+  #       dataset: 
+  #         path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_PNG_relabel_rearrange_Patch-png/Patched_P1024_O128_BG20p/SAR_2_PNG_relabel_rearrange' 
+  #       reconstruction:
+  #         enabled: True
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_PNG_relabel_rearrange'
+
+
+  # - experiment_name: 'Zenodo-3type(P640_BGK20)-(patch_png)'
+  #   mode: 'test' 
+  #   base_model: '/home/yuan/OIL_PROJECT/result-rearrange-png/20250808-104543_Zenodo-3type(P640_BGK20)-(patch_png)/weights/best.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_original_all_classes_patch_png/Patched_P640_O128_BG20p/zenodo_original_all_classes' 
+  #   epochs: 800
+  #   imgsz: 640
+  #   batch_size: 64
+  #   patience: 300
+  #   cls_weight: 0.5 
+  #   post_tests:
+  #     - test_name: 'Zenodo' 
+  #       dataset: 
+  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_original_all_classes_patch_png/Patched_P640_O128_BG20p/zenodo_original_all_classes' 
+  #       reconstruction:
+  #         enabled: True
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_original_all_classes'
 
   # - experiment_name: 'Zenodo-3type(P1024_BGK20)-(patch_png)'
   #   mode: 'train' 
@@ -3127,3 +2007,675 @@ experiments:
   #       reconstruction:
   #         enabled: True
   #         original_data_root: ''
+
+  #   # ===================================================================
+  # - experiment_name: 'DV2-SAR(P640_BGK20)-(patch_png)'
+  #   mode: 'test' 
+  #   base_model: '/home/yuan/OIL_PROJECT/result-rearrange-png/20250808-074146_DV2-SAR(P640_BGK20)-(patch_png)/weights/best.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_reindex_rearrange_rid_suspect_large_Patch/Patched_P640_O128_BG20p/SAR_2_reindex_rearrange_rid_suspect_large' 
+  #   epochs: 800
+  #   imgsz: 640
+  #   batch_size: 128
+  #   patience: 0
+  #   cls_weight: 0.5 
+  #   post_tests:
+  #     - test_name: 'DV2-SAR' 
+  #       dataset: 
+  #         path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_reindex_rearrange_rid_suspect_large_Patch/Patched_P640_O128_BG20p/SAR_2_reindex_rearrange_rid_suspect_large' 
+  #       reconstruction:
+  #         enabled: True
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_reindex_rearrange_rid_suspect_large'
+
+
+
+
+  # - experiment_name: 'HNM_SAR2-Relabel-rearrange_P640'
+  #   mode: 'train'
+  #   run: True
+  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt'
+  #   dataset:
+  #     # 指向階段二的輸出路徑
+  #     path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_PNG_relabel_rearrange_Patch-png/HNM_Step1_TrainingSet-P640'
+  #   epochs: 100  # Model v1 不需要訓練太久
+  #   imgsz: 640
+  #   batch_size: 64
+  #   patience: 0
+
+  # - experiment_name: 'DV2-SAR(P640-HNM)'
+  #   mode: 'train' 
+  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_PNG_relabel_rearrange_Patch-png/HNM_Step3_Final_SAR_P640' 
+  #   epochs: 800
+  #   imgsz: 640
+  #   batch_size: 64
+  #   patience: 0
+  #   cls_weight: 0.5 
+  #   post_tests:
+  #     - test_name: 'DV2-SAR' 
+  #       dataset: 
+  #         path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_PNG_relabel_rearrange_Patch-png/HNM_Step3_Final_SAR_P640' 
+  #       reconstruction:
+  #         enabled: True
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_PNG_relabel_rearrange'
+
+  # - experiment_name: 'DV2-SAR(P640-HNM)'
+  #   mode: 'test' 
+  #   base_model: '/home/yuan/OIL_PROJECT/result-rearrange-png/20250809-200459_DV2-SAR(P640-HNM)/weights/best.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_reindex_rearrange_rid_suspect_large_Patch/Patched_P640_O128_BG20p/SAR_2_reindex_rearrange_rid_suspect_large' 
+  #   epochs: 800
+  #   imgsz: 640
+  #   batch_size: 64
+  #   patience: 0
+  #   cls_weight: 0.5 
+  #   post_tests:
+  #     - test_name: 'DV2-SAR' 
+  #       dataset: 
+  #         path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_reindex_rearrange_rid_suspect_large_Patch/Patched_P640_O128_BG20p/SAR_2_reindex_rearrange_rid_suspect_large' 
+  #       reconstruction:
+  #         enabled: True
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_reindex_rearrange_rid_suspect_large'
+
+
+  # - experiment_name: 'Zenodo-3type(P640)_DV2-SAR(P640-HNM)'
+  #   mode: 'train' 
+  #   base_model: '/home/yuan/OIL_PROJECT/result-rearrange-png/20250808-104543_Zenodo-3type(P640_BGK20)-(patch_png)/weights/best.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_PNG_relabel_rearrange_Patch-png/HNM_Step3_Final_SAR_P640' 
+  #   epochs: 800
+  #   imgsz: 640
+  #   batch_size: 64
+  #   patience: 0
+  #   cls_weight: 0.5 
+  #   post_tests:
+  #     - test_name: 'DV2-SAR' 
+  #       dataset: 
+  #         path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_PNG_relabel_rearrange_Patch-png/HNM_Step3_Final_SAR_P640' 
+  #       reconstruction:
+  #         enabled: True
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_PNG_relabel_rearrange'
+
+  # - experiment_name: 'Zenodo-3type(P640)_DV2-SAR(P640-HNM)'
+  #   mode: 'test' 
+  #   base_model: '/home/yuan/OIL_PROJECT/result-rearrange-png/20250809-223658_Zenodo-3type(P640)_DV2-SAR(P640-HNM)/weights/best.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_reindex_rearrange_rid_suspect_large_Patch/Patched_P640_O128_BG20p/SAR_2_reindex_rearrange_rid_suspect_large' 
+  #   epochs: 800
+  #   imgsz: 640
+  #   batch_size: 64
+  #   patience: 0
+  #   cls_weight: 0.5 
+  #   post_tests:
+  #     - test_name: 'DV2-SAR' 
+  #       dataset: 
+  #         path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_reindex_rearrange_rid_suspect_large_Patch/Patched_P640_O128_BG20p/SAR_2_reindex_rearrange_rid_suspect_large' 
+  #       reconstruction:
+  #         enabled: True
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_reindex_rearrange_rid_suspect_large'
+        
+
+  # - experiment_name: 'Zenodo-3type(P640)_DV2-SAR(P640-BG20)'
+  #   mode: 'train' 
+  #   base_model: '/home/yuan/OIL_PROJECT/result-rearrange-png/20250808-104543_Zenodo-3type(P640_BGK20)-(patch_png)/weights/best.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_PNG_relabel_rearrange_Patch-png/Patched_P640_O128_BG20p/SAR_2_PNG_relabel_rearrange' 
+  #   epochs: 800
+  #   imgsz: 640
+  #   batch_size: 64
+  #   patience: 0
+  #   cls_weight: 0.5 
+  #   post_tests:
+  #     - test_name: 'DV2-SAR' 
+  #       dataset: 
+  #         path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_PNG_relabel_rearrange_Patch-png/Patched_P640_O128_BG20p/SAR_2_PNG_relabel_rearrange' 
+  #       reconstruction:
+  #         enabled: True
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_PNG_relabel_rearrange'
+
+
+  # - experiment_name: 'HNM_SAR2-Relabel-rearrange_P1024'
+  #   mode: 'train'
+  #   run: True
+  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt'
+  #   dataset:
+  #     # 指向階段二的輸出路徑
+  #     path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_PNG_relabel_rearrange_Patch-png/HNM_Step1_TrainingSet-P1024'
+  #   epochs: 100  # Model v1 不需要訓練太久
+  #   imgsz: 1024
+  #   batch_size: 64
+  #   patience: 0
+
+
+  # - experiment_name: 'DV2-SAR(P1024-HNM)'
+  #   mode: 'train' 
+  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_PNG_relabel_rearrange_Patch-png/HNM_Step3_Final_SAR_P1024' 
+  #   epochs: 800
+  #   imgsz: 1024
+  #   batch_size: 64
+  #   patience: 0
+  #   cls_weight: 0.5 
+  #   post_tests:
+  #     - test_name: 'DV2-SAR' 
+  #       dataset: 
+  #         path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_PNG_relabel_rearrange_Patch-png/HNM_Step3_Final_SAR_P1024' 
+  #       reconstruction:
+  #         enabled: True
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_PNG_relabel_rearrange'
+
+  # - experiment_name: 'Zenodo-3type(P1024_BGK20)'
+  #   mode: 'train' 
+  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_original_all_classes_patch_png/Patched_P1024_O128_BG20p/zenodo_original_all_classes' 
+  #   epochs: 800
+  #   imgsz: 1024
+  #   batch_size: 64
+  #   patience: 300
+  #   cls_weight: 0.5 
+  #   post_tests:
+  #     - test_name: 'DV2-SAR' 
+  #       dataset: 
+  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_original_all_classes_patch_png/Patched_P1024_O128_BG20p/zenodo_original_all_classes' 
+  #       reconstruction:
+  #         enabled: True
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_original_all_classes'
+
+
+  # - experiment_name: 'Zenodo-3type(P1024_BGK20)_DV2-SAR(HNM)'
+  #   mode: 'train' 
+  #   base_model: '/home/yuan/OIL_PROJECT/result-rearrange-png/20250811-033022_Zenodo-3type(P1024_BGK20)/weights/best.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_PNG_relabel_rearrange_Patch-png/HNM_Step3_Final_SAR_P1024' 
+  #   epochs: 800
+  #   imgsz: 1024
+  #   batch_size: 64
+  #   patience: 0
+  #   cls_weight: 0.5 
+  #   post_tests:
+  #     - test_name: 'DV2-SAR' 
+  #       dataset: 
+  #         path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_PNG_relabel_rearrange_Patch-png/HNM_Step3_Final_SAR_P1024' 
+  #       reconstruction:
+  #         enabled: True
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_PNG_relabel_rearrange_Patch-png/HNM_Step3_Final_SAR_P1024'
+
+  # - experiment_name: 'Zenodo-3type(P640_BGK20)_DV2-SAR(HNM)'
+  #   mode: 'test' 
+  #   base_model: '/home/yuan/OIL_PROJECT/result-rearrange-png/20250809-223658_Zenodo-3type(P640)_DV2-SAR(P640-HNM)/weights/best.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_SAR_3/S1_PNG_output_confidence_higher_than_0_Patch/Patched_P640_O128_BG20p/S1_PNG_output_confidence_higher_than_0' 
+  #   epochs: 800
+  #   imgsz: 640
+  #   batch_size: 64
+  #   patience: 0
+  #   cls_weight: 0.5 
+  #   post_tests:
+  #     - test_name: 'DV3' 
+  #       dataset: 
+  #         path: 'OIL_PROJECT/dataset/dataset_SAR_3/S1_PNG_output_confidence_higher_than_0_Patch/Patched_P640_O128_BG20p/S1_PNG_output_confidence_higher_than_0' 
+  #       reconstruction:
+  #         enabled: True
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_SAR_3/S1_PNG_output_confidence_higher_than_0'
+
+
+
+
+
+
+  ########################################################################################################
+  ########################################################################################################
+  ########################################################################################################
+  #################                                                                   ####################
+  #################                                                                   ####################
+  #################                                                                   ####################
+  #################                                                                   ####################
+  #################                                                                   ####################
+  ###--------------                    2025-08-17                                     -----------------###
+  #################                         Deeplabv3                                 ####################
+  #################                                                                   ####################
+  #################                                                                   ####################
+  #################                                                                   ####################
+  #################                                                                   ####################
+  ########################################################################################################
+  ########################################################################################################
+  ########################################################################################################
+
+  # - experiment_name: 'DV2-SAR(P1024-HNM)-deeplabv3'
+  #   architecture: 'deeplabv3+'
+  #   mode: 'train' 
+  #   base_model: '' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_PNG_relabel_rearrange_Patch-png/HNM_Step3_Final_SAR_P1024' 
+  #   epochs: 800
+  #   imgsz: 1024
+  #   batch_size: 8
+  #   patience: 0
+  #   cls_weight: 0.5 
+  #   post_tests:
+  #     - test_name: 'DV2-SAR' 
+  #       dataset: 
+  #         path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_PNG_relabel_rearrange_Patch-png/HNM_Step3_Final_SAR_P1024' 
+  #       reconstruction:
+  #         enabled: True
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_PNG_relabel_rearrange'
+
+  # - experiment_name: 'DV2-SAR(P640-HNM)-deeplabv3-coco-Pretrained'
+  #   architecture: 'deeplabv3+'
+  #   mode: 'train' 
+  #   base_model: '' 
+  #   architecture_cfg:
+  #     num_classes: 1
+  #     torchvision_model: 'deeplabv3_resnet50' 
+  #     torchvision_weights: 'DeepLabV3_ResNet50_Weights.COCO_WITH_VOC_LABELS_V1'
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_PNG_relabel_rearrange_Patch-png/HNM_Step3_Final_SAR_P640' 
+  #   epochs: 800
+  #   imgsz: 640
+  #   batch_size: 28
+  #   patience: 150
+  #   cls_weight: 0.5 
+  #   post_tests:
+  #     - test_name: 'DV2-SAR' 
+  #       dataset: 
+  #         path: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_PNG_relabel_rearrange_Patch-png/HNM_Step3_Final_SAR_P640' 
+  #       reconstruction:
+  #         enabled: True
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_SAR_2/SAR_2_PNG_relabel_rearrange'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  ########################################################################################################
+  ########################################################################################################
+  ########################################################################################################
+  #################                                                                   ####################
+  #################                                                                   ####################
+  #################                                                                   ####################
+  #################                                                                   ####################
+  #################                                                                   ####################
+  ###--------------                    2025-08-20                                     -----------------###
+  #################                         IR                                 ####################
+  #################                                                                   ####################
+  #################                                                                   ####################
+  #################                                                                   ####################
+  #################                                                                   ####################
+  ########################################################################################################
+  ########################################################################################################
+  ########################################################################################################
+
+
+  # - experiment_name: 'HNM_Step3_IR_P640'
+  #   mode: 'train'
+  #   run: True
+  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt'
+  #   dataset:
+  #     # 指向階段二的輸出路徑
+  #     path: 'OIL_PROJECT/dataset/dataset_optical/IR_Patch/HNM_Step1_TrainingSet-P640'
+  #   epochs: 100  # Model v1 不需要訓練太久
+  #   imgsz: 640
+  #   batch_size: 64
+  #   patience: 0
+
+  # - experiment_name: 'DV2-IR(P640-BGK20)'
+  #   mode: 'train' 
+  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_optical/IR_Patch/Patched_P640_O128_BG20p/IR' 
+  #   epochs: 800
+  #   imgsz: 640
+  #   batch_size: 64
+  #   patience: 400
+  #   cls_weight: 0.5 
+  #   post_tests:
+  #     - test_name: 'DV2-IR' 
+  #       dataset: 
+  #         path: 'OIL_PROJECT/dataset/dataset_optical/IR_Patch/Patched_P640_O128_BG20p/IR' 
+  #       reconstruction:
+  #         enabled: True
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_optical/IR'
+
+  # - experiment_name: 'DV2-IR(P640-HNM)'
+  #   mode: 'train' 
+  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_optical/IR_Patch/HNM_Step5_Final_IR_P640' 
+  #   epochs: 800
+  #   imgsz: 640
+  #   batch_size: 64
+  #   patience: 400
+  #   cls_weight: 0.5 
+  #   post_tests:
+  #     - test_name: 'DV2-IR' 
+  #       dataset: 
+  #         path: 'OIL_PROJECT/dataset/dataset_optical/IR_Patch/HNM_Step5_Final_IR_P640' 
+  #       reconstruction:
+  #         enabled: True
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_optical/IR'
+
+  # - experiment_name: 'DV2-IR(P640-HNM)'
+  #   mode: 'train' 
+  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_optical/IR_Patch/HNM_Step5_Final_IR_P640_v2' 
+  #   epochs: 800
+  #   imgsz: 640
+  #   batch_size: 64
+  #   patience: 400
+  #   cls_weight: 0.5 
+  #   post_tests:
+  #     - test_name: 'DV2-IR' 
+  #       dataset: 
+  #         path: 'OIL_PROJECT/dataset/dataset_optical/IR_Patch/HNM_Step5_Final_IR_P640_v2' 
+  #       reconstruction:
+  #         enabled: True
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_optical/IR'
+
+  # - experiment_name: 'DV2-IR(P640-HNM)'
+  #   mode: 'test' 
+  #   base_model: '/home/yuan/OIL_PROJECT/result_IR/20250820-221815_DV2-IR(P640-HNM-v2)/weights/best.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_optical/IR_for_proposal_Patch/Patched_P640_O128_BG20p/IR_for_proposal' 
+  #   epochs: 800
+  #   imgsz: 640
+  #   batch_size: 64
+  #   patience: 400
+  #   cls_weight: 0.5 
+  #   post_tests:
+  #     - test_name: 'DV2-IR' 
+  #       dataset: 
+  #         path: 'OIL_PROJECT/dataset/dataset_optical/IR_for_proposal_Patch/Patched_P640_O128_BG20p/IR_for_proposal' 
+  #       reconstruction:
+  #         enabled: True
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_optical/IR_for_proposal'
+
+
+
+  ########################################################################################################
+  ########################################################################################################
+  ########################################################################################################
+  #################                                                                   ####################
+  #################                                                                   ####################
+  #################                                                                   ####################
+  #################                                                                   ####################
+  #################                                                                   ####################
+  ###--------------                    2025-08-22                                     -----------------###
+  #################                         UAV                                 ####################
+  #################                                                                   ####################
+  #################                                                                   ####################
+  #################                                                                   ####################
+  #################                                                                   ####################
+  ########################################################################################################
+  ########################################################################################################
+  ########################################################################################################
+
+  # - experiment_name: 'UAV-P640_BG20'
+  #   mode: 'train' 
+  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_UAV/partial_5280*2970_dataset_Patch/Patched_P640_O128_BG20p/partial_5280*2970_dataset' 
+  #   epochs: 800
+  #   imgsz: 640
+  #   batch_size: 64
+  #   patience: 150
+  #   cls_weight: 0.5 
+  #   post_tests:
+  #     - test_name: 'UAV' 
+  #       dataset: 
+  #         path: 'OIL_PROJECT/dataset/dataset_UAV/partial_5280*2970_dataset_Patch/Patched_P640_O128_BG20p/partial_5280*2970_dataset' 
+  #       reconstruction:
+  #         enabled: True
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_UAV/partial_5280*2970_dataset'
+
+  # - experiment_name: 'UAV-P640_BG20'
+  #   mode: 'test' 
+  #   base_model: '/home/yuan/OIL_PROJECT/result_UAV/20250822-191357_UAV-P640_BG20/weights/best.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_UAV/partial_5280*2970_dataset_Patch/Patched_P640_O128_BG20p/partial_5280*2970_dataset' 
+  #   epochs: 800
+  #   imgsz: 640
+  #   batch_size: 64
+  #   patience: 150
+  #   cls_weight: 0.5 
+  #   post_tests:
+  #     - test_name: 'UAV' 
+  #       dataset: 
+  #         path: 'OIL_PROJECT/dataset/dataset_UAV/partial_5280*2970_dataset_Patch/Patched_P640_O128_BG20p/partial_5280*2970_dataset' 
+  #       reconstruction:
+  #         enabled: True
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_UAV/partial_5280*2970_dataset'
+
+
+  # - experiment_name: 'Zenodo-3type(P640_BGK20)_VV_VH'
+  #   mode: 'train' 
+  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_Patch/Patched_P640_O128_BG20p/zenodo_vv_vh' 
+  #   epochs: 800
+  #   imgsz: 640
+  #   batch_size: 128
+  #   patience: 150
+  #   cls_weight: 0.5 
+  #   post_tests:
+  #     - test_name: 'zenodo' 
+  #       dataset: 
+  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_Patch/Patched_P640_O128_BG20p/zenodo_vv_vh' 
+  #       reconstruction:
+  #         enabled: True
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh'
+
+  # - experiment_name: 'Zenodo-3type(P640_BGK20)_VV'
+  #   mode: 'train' 
+  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_Patch/Patched_P640_O128_BG20p/zenodo_vv' 
+  #   epochs: 800
+  #   imgsz: 640
+  #   batch_size: 128
+  #   patience: 150
+  #   cls_weight: 0.5 
+  #   post_tests:
+  #     - test_name: 'zenodo' 
+  #       dataset: 
+  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_Patch/Patched_P640_O128_BG20p/zenodo_vv' 
+  #       reconstruction:
+  #         enabled: True
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv'
+
+  # - experiment_name: 'Zenodo-3type(P1024_BGK20)_VV'
+  #   mode: 'train' 
+  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_Patch/Patched_P1024_O128_BG20p/zenodo_vv' 
+  #   epochs: 800
+  #   imgsz: 1024
+  #   batch_size: 64
+  #   patience: 150
+  #   cls_weight: 0.5 
+  #   post_tests:
+  #     - test_name: 'zenodo' 
+  #       dataset: 
+  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_Patch/Patched_P1024_O128_BG20p/zenodo_vv' 
+  #       reconstruction:
+  #         enabled: True
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv'
+
+  # - experiment_name: 'Zenodo-3type(P1024_BGK20)_VV_VH'
+  #   mode: 'train' 
+  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_Patch/Patched_P1024_O128_BG20p/zenodo_vv_vh' 
+  #   epochs: 800
+  #   imgsz: 1024
+  #   batch_size: 64
+  #   patience: 150
+  #   cls_weight: 0.5 
+  #   post_tests:
+  #     - test_name: 'zenodo' 
+  #       dataset: 
+  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_Patch/Patched_P1024_O128_BG20p/zenodo_vv_vh' 
+  #       reconstruction:
+  #         enabled: True
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh'
+
+  # - experiment_name: 'Zenodo-3type(P640_BGK20)_VV'
+  #   mode: 'test' 
+  #   base_model: '/home/yuan/OIL_PROJECT/result_zenodo_vv_vh/20250906-025207_Zenodo-3type(P640_BGK20)_VV/weights/best.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_Patch/Patched_P640_O128_BG20p/zenodo_vv' 
+  #   epochs: 800
+  #   imgsz: 640
+  #   batch_size: 128
+  #   patience: 150
+  #   cls_weight: 0.5 
+  #   post_tests:
+  #     - test_name: 'zenodo' 
+  #       dataset: 
+  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_Patch/Patched_P640_O128_BG20p/zenodo_vv' 
+  #       reconstruction:
+  #         enabled: True
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv'
+
+  # - experiment_name: 'Zenodo-3type(P640_BGK20)_VV_VH'
+  #   mode: 'test' 
+  #   base_model: '/home/yuan/OIL_PROJECT/result_zenodo_vv_vh/20250831-074703_Zenodo-3type(P640_BGK20)_VV_VH/weights/best.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_Patch/Patched_P640_O128_BG20p/zenodo_vv_vh' 
+  #   epochs: 800
+  #   imgsz: 640
+  #   batch_size: 128
+  #   patience: 150
+  #   cls_weight: 0.5 
+  #   post_tests:
+  #     - test_name: 'zenodo' 
+  #       dataset: 
+  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_Patch/Patched_P640_O128_BG20p/zenodo_vv_vh' 
+  #       reconstruction:
+  #         enabled: True
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh'
+
+  # - experiment_name: 'Zenodo-3type(P1024_BGK20)_VV'
+  #   mode: 'test' 
+  #   base_model: '/home/yuan/OIL_PROJECT/result_zenodo_vv_vh/20250906-213436_Zenodo-3type(P1024_BGK20)_VV/weights/best.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_Patch/Patched_P1024_O0_BG20p/zenodo_vv' 
+  #   epochs: 800
+  #   imgsz: 1024
+  #   batch_size: 64
+  #   patience: 150
+  #   cls_weight: 0.5 
+  #   post_tests:
+  #     - test_name: 'zenodo' 
+  #       dataset: 
+  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_Patch/Patched_P1024_O0_BG20p/zenodo_vv' 
+  #       reconstruction:
+  #         enabled: True
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv'
+
+
+  # - experiment_name: 'Zenodo-3type(P1024_BGK20)_VV_VH'
+  #   mode: 'test' 
+  #   base_model: '/home/yuan/OIL_PROJECT/result_zenodo_vv_vh/20250907-010435_Zenodo-3type(P1024_BGK20)_VV_VH/weights/best.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_Patch/Patched_P1024_O0_BG20p/zenodo_vv_vh' 
+  #   epochs: 800
+  #   imgsz: 1024
+  #   batch_size: 64
+  #   patience: 150
+  #   cls_weight: 0.5 
+  #   post_tests:
+  #     - test_name: 'zenodo' 
+  #       dataset: 
+  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_Patch/Patched_P1024_O0_BG20p/zenodo_vv_vh' 
+  #       reconstruction:
+  #         enabled: True
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh'
+
+
+  # - experiment_name: 'Zenodo-3type(P1024_BGK20)_VV'
+  #   mode: 'test' 
+  #   base_model: '/home/yuan/OIL_PROJECT/result_zenodo_vv_vh/20250906-213436_Zenodo-3type(P1024_BGK20)_VV/weights/best.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_Patch/Patched_P1024_O128_BG0p/zenodo_vv' 
+  #   epochs: 800
+  #   imgsz: 1024
+  #   batch_size: 64
+  #   patience: 150
+  #   cls_weight: 0.5 
+  #   post_tests:
+  #     - test_name: 'zenodo' 
+  #       dataset: 
+  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_Patch/Patched_P1024_O128_BG0p/zenodo_vv' 
+  #       reconstruction:
+  #         enabled: True
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv'
+
+  # - experiment_name: 'Zenodo-3type(P1024_BGK20)_VV_VH'
+  #   mode: 'test' 
+  #   base_model: '/home/yuan/OIL_PROJECT/result_zenodo_vv_vh/20250907-010435_Zenodo-3type(P1024_BGK20)_VV_VH/weights/best.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_Patch/Patched_P1024_O128_BG0p/zenodo_vv_vh' 
+  #   epochs: 800
+  #   imgsz: 1024
+  #   batch_size: 64
+  #   patience: 150
+  #   cls_weight: 0.5 
+  #   post_tests:
+  #     - test_name: 'zenodo' 
+  #       dataset: 
+  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_Patch/Patched_P1024_O128_BG0p/zenodo_vv_vh' 
+  #       reconstruction:
+  #         enabled: True
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh'
+
+  - experiment_name: 'Zenodo-3type(Oringal)_VV_resize_512'
+    mode: 'test' 
+    base_model: '/home/yuan/OIL_PROJECT/result_zenodo_vv_vh/20250911-042352_Zenodo-3type(Oringal)_VV_resize_512/weights/best.pt' 
+    dataset:
+      path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv' 
+    epochs: 800
+    imgsz: 512
+    batch_size: 64
+    patience: 150
+    cls_weight: 0.5 
+    post_tests:
+      - test_name: 'zenodo' 
+        dataset: 
+          path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv' 
+        reconstruction:
+          enabled: False
+          original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv'
+
+
+  - experiment_name: 'Zenodo-3type(Oringal)_VV_VH_resize_512'
+    mode: 'test' 
+    base_model: '/home/yuan/OIL_PROJECT/result_zenodo_vv_vh/20250911-073800_Zenodo-3type(Oringal)_VV_VH_resize_512/weights/best.pt' 
+    dataset:
+      path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh' 
+    epochs: 800
+    imgsz: 512
+    batch_size: 64
+    patience: 150
+    cls_weight: 0.5 
+    post_tests:
+      - test_name: 'zenodo' 
+        dataset: 
+          path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh' 
+        reconstruction:
+          enabled: False
+          original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh'
+
+

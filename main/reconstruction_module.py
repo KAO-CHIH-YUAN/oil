@@ -17,7 +17,8 @@ def stitch_masks(patch_predictions_with_scores, original_size):
     
     for mask, score, x, y in patch_predictions_with_scores:
         if mask is not None:
-            mask_np = mask.cpu().numpy().astype(np.float32)
+            #mask_np = mask.cpu().numpy().astype(np.float32)
+            mask_np = torch.sigmoid(mask).cpu().numpy().astype(np.float32)
             if mask_np.ndim == 3:
                 mask_np = mask_np.squeeze(0)
             
@@ -37,6 +38,27 @@ def calculate_iou(mask1, mask2):
     intersection = np.logical_and(mask1, mask2).sum()
     union = np.logical_or(mask1, mask2).sum()
     return intersection / (union + 1e-9)
+
+def draw_segmentation_contours(image, mask, color=(0, 255, 255), thickness=2):
+    """
+    在影像上繪製分割遮罩的輪廓線。
+
+    Args:
+        image: 要在上面繪圖的原始圖片 (NumPy array)。
+        mask: 二值化的分割遮罩 (黑白圖, NumPy array)。
+        color (tuple): 輪廓線的 BGR 顏色。
+        thickness (int): 輪廓線的粗度。
+    """
+    # 在遮罩上尋找所有物件的輪廓
+    # cv2.RETR_EXTERNAL: 只尋找最外層的輪廓
+    # cv2.CHAIN_APPROX_SIMPLE: 壓縮水平、垂直和對角線段，只保留其端點，節省記憶體
+    contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    
+    # 將找到的所有輪廓繪製到原始圖片上
+    # -1 表示繪製所有找到的輪廓
+    cv2.drawContours(image, contours, -1, color, thickness)
+    
+    return image
 
 def draw_final_boxes(image, boxes, scores, labels):
     """在影像上繪製最終經過 NMS 處理的邊界框。"""
@@ -93,7 +115,7 @@ def run_reconstruction_evaluation(model, test_image_dir, original_data_root, res
         all_detections_on_image = []
         for patch_path, x, y in patches:
             results = model.predict(source=str(patch_path), verbose=False, imgsz=imgsz, conf=vis_params['min_conf'])
-            if results and results[0].masks:
+            if results and results[0] and results[0].boxes and results[0].masks is not None:
                 for i in range(len(results[0].masks.data)):
                     all_detections_on_image.append({
                         "mask": results[0].masks.data[i],
@@ -108,7 +130,6 @@ def run_reconstruction_evaluation(model, test_image_dir, original_data_root, res
                         "origin_y": y
                     })
         
-        # ⭐⭐⭐ 核心修正：在此處初始化變數 ⭐⭐⭐
         # 為 final_boxes 等變數提供一個預設的空列表，以處理無任何偵測結果的情況
         final_boxes, final_scores, final_labels = [], [], []
 
@@ -156,6 +177,24 @@ def run_reconstruction_evaluation(model, test_image_dir, original_data_root, res
         # 現在呼叫 draw_final_boxes 是安全的，因為即使沒有偵測，它也會接收到空列表
         final_overlay_image_with_boxes = draw_final_boxes(final_overlay_image, final_boxes, final_scores, final_labels)
         cv2.imwrite(str(overlay_vis_dir / f"{original_name}_overlay_iou_{per_image_iou:.4f}.png"), final_overlay_image_with_boxes)
+        
+        """取消框線繪製"""
+        # cv2.imwrite(str(overlay_vis_dir / f"{original_name}_overlay_iou_{per_image_iou:.4f}.png"), final_overlay_image)
+
+        """ --- ★★★ 修改開始 ★★★ ---
+        # 將最終的疊圖複製一份，專門用來繪製輪廓線
+        final_overlay_image_with_contours = final_overlay_image.copy()
+        final_overlay_image_with_contours = draw_segmentation_contours(
+                image=final_overlay_image_with_contours, 
+                mask=reconstructed_mask, 
+                color=(0, 255, 255),  # BGR 顏色：(0, 255, 255) 是青色
+                thickness=8           # 線條粗度
+            )
+            # --- ★★★ 修改結束 ★★★ ---
+
+        # 儲存繪製了輪廓線的最終圖片
+        cv2.imwrite(str(overlay_vis_dir / f"{original_name}_overlay_iou_{per_image_iou:.4f}.png"), final_overlay_image_with_contours)
+        """
 
     # --- 最終步驟: 在所有圖片處理完後，計算並回傳整體指標 ---
     iou_denominator = total_tp + total_fp + total_fn

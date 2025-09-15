@@ -13,101 +13,100 @@ import torch                  # PyTorch 函式庫，YOLOv8 基於此建構
 import shutil                 # 用於高階的檔案操作，例如刪除整個資料夾
 
 # 從您的專案中匯入 reconstruction_module，用於後續的影像重組評估
-from reconstruction_module import run_reconstruction_evaluation
+from reconstruction_module import run_reconstruction_evaluation, calculate_iou
+from deeplab_adapter import DeepLabAdapter
 
 def generate_categorized_predictions(model, exp_config, imgsz, results_path):
     """
     對測試集產生預測，並根據預測結果與真實標籤的比較，
     將預測後的影像分類儲存到對應的資料夾 (TP, FP, FN, TN) 中。
-
-    Args:
-        model (YOLO): 已經載入權重的 YOLO 模型物件。
-        exp_config (dict): 包含當前實驗設定的字典。
-        imgsz (int): 用於預測的影像尺寸。
-        results_path (Path): 本次實驗結果的根目錄路徑。
+    ⭐ 新功能：在檔名中標示每張圖片的 IoU 分數。
     """
     print("\n--- 產生分類化的測試集預測圖 (TP, FP, FN, TN) ---")
     try:
-        # --- 步驟 1: 準備並驗證所有需要的路徑 ---
+        # --- 準備路徑 ---
         dataset_cfg = exp_config.get('dataset', {})
         if not dataset_cfg:
             print("  [錯誤] 找不到 dataset 設定，無法執行分類預測。")
             return
 
-        project_root = Path.cwd() # 獲取當前工作目錄
-        # 組合出資料集的絕對路徑
+        project_root = Path.cwd()
         base_path = project_root / dataset_cfg.get('path', '').lstrip('./')
-        # 測試影像資料夾路徑
         test_img_dir = base_path / dataset_cfg.get('test', 'images/test')
-        # 根據影像路徑推斷出對應的標籤資料夾路徑
         test_label_dir = test_img_dir.parent.parent / 'labels' / test_img_dir.name
-        
-        # 檢查影像和標籤資料夾是否存在，若不存在則無法繼續
+
         if not test_img_dir.is_dir() or not test_label_dir.is_dir():
-            print(f"  [警告] 找不到測試圖片資料夾 ({test_img_dir}) 或標籤資料夾 ({test_label_dir})，跳過此任務。")
+            print(f"  [警告] 找不到測試圖片或標籤資料夾，跳過此任務。")
             return
 
-        # --- 步驟 2: 建立用來存放分類結果的輸出資料夾 ---
+        # --- 建立輸出資料夾 ---
         output_base_dir = results_path / "categorized_predictions"
-        # 定義四種分類的資料夾路徑
-        tp_dir = output_base_dir / "1_True_Positive (偵測到且正確)"
-        fp_dir = output_base_dir / "2_False_Positive (偵測到但錯誤)"
-        fn_dir = output_base_dir / "3_False_Negative (未偵測到但應偵測)"
-        tn_dir = output_base_dir / "4_True_Negative (正確忽略)"
+        tp_dir = output_base_dir / "1_True_Positive"
+        fp_dir = output_base_dir / "2_False_Positive"
+        fn_dir = output_base_dir / "3_False_Negative"
+        tn_dir = output_base_dir / "4_True_Negative"
 
-        # 為了確保每次執行都是全新的結果，如果舊的資料夾存在，就先刪除它
         if output_base_dir.exists():
             shutil.rmtree(output_base_dir)
-        # 建立所有分類資料夾
-        tp_dir.mkdir(parents=True)
-        fp_dir.mkdir(parents=True)
-        fn_dir.mkdir(parents=True)
-        tn_dir.mkdir(parents=True)
+        for d in [tp_dir, fp_dir, fn_dir, tn_dir]:
+            d.mkdir(parents=True)
 
-        # 獲取測試資料夾中所有 .jpg 和 .png 格式的影像檔案
         image_files = list(test_img_dir.glob('*.jpg')) + list(test_img_dir.glob('*.png'))
 
-        # --- 步驟 3: 遍歷所有測試影像，進行預測和分類 ---
+        # --- 遍歷所有測試影像 ---
         for img_path in tqdm(image_files, desc="分類預測結果"):
-            # 檢查真實標籤 (Ground Truth) 是否存在且非空檔案
+            # ⭐ 核心修正：在迴圈開始時就讀取影像，以確保 h_orig 和 w_orig 始終被定義
+            original_image_cv = cv2.imread(str(img_path))
+            if original_image_cv is None:
+                continue
+            h_orig, w_orig, _ = original_image_cv.shape
+
+            # 檢查 .txt 標籤是否存在且非空
             gt_txt_path = test_label_dir / (img_path.stem + '.txt')
-            # 如果 .txt 標籤檔存在且檔案大小大於0，代表這張圖有真實的油汙目標
-            has_ground_truth_oil = gt_txt_path.exists() and gt_txt_path.stat().st_size > 0
+            has_ground_truth_object = gt_txt_path.exists() and gt_txt_path.stat().st_size > 0
 
-            # 使用 YOLO 模型對單張影像執行預測
+            # 讀取真實的 .png 遮罩檔案
+            gt_mask_path = test_label_dir / (img_path.stem + '.png')
+            if gt_mask_path.exists():
+                gt_mask_cv = cv2.imread(str(gt_mask_path), cv2.IMREAD_GRAYSCALE)
+                gt_mask_binary = (gt_mask_cv > 0).astype(np.uint8) if gt_mask_cv is not None else np.zeros((h_orig, w_orig), dtype=np.uint8)
+            else:
+                gt_mask_binary = np.zeros((h_orig, w_orig), dtype=np.uint8)
+
+            # 執行預測
             results = model.predict(source=str(img_path), verbose=False, imgsz=imgsz, conf=exp_config.get('eval_conf', 0.25))
-            
-            # 檢查模型的預測結果中是否包含任何偵測框
-            prediction_made = results and results[0].boxes and len(results[0].boxes.data) > 0
+            prediction_made = results and results[0] and results[0].masks is not None
 
-            # --- 步驟 4: 根據「是否有預測」和「是否有真實目標」的組合，進行四種情況的分類 ---
-            if prediction_made and has_ground_truth_oil:
-                # 情況一: 真陽性 (True Positive, TP)
-                # 模型做出了預測，且影像中確實有油汙。這是最好的情況。
-                annotated_image = results[0].plot() # 獲取疊加上預測框和遮罩的影像
-                cv2.imwrite(str(tp_dir / img_path.name), annotated_image) # 儲存到 TP 資料夾
-            
-            elif prediction_made and not has_ground_truth_oil:
-                # 情況二: 偽陽性 (False Positive, FP)
-                # 模型做出了預測，但影像中其實沒有油汙。這是「誤報」。
+            # 準備預測遮罩
+            if prediction_made:
+                pred_mask_small = torch.any(results[0].masks.data, dim=0).cpu().numpy().astype(np.uint8)
+                pred_mask_resized = cv2.resize(pred_mask_small, (w_orig, h_orig), interpolation=cv2.INTER_NEAREST)
+            else:
+                pred_mask_resized = np.zeros_like(gt_mask_binary)
+
+            # 計算 IoU
+            per_image_iou = calculate_iou(pred_mask_resized, gt_mask_binary)
+            output_filename = f"{img_path.stem}_iou_{per_image_iou:.4f}{img_path.suffix}"
+
+            # 進行分類
+            if prediction_made and has_ground_truth_object:
                 annotated_image = results[0].plot()
-                cv2.imwrite(str(fp_dir / img_path.name), annotated_image) # 儲存到 FP 資料夾
-
-            elif not prediction_made and has_ground_truth_oil:
-                # 情況三: 偽陰性 (False Negative, FN)
-                # 模型沒有做出預測，但影像中其實有油汙。這是「漏報」。
-                shutil.copy(img_path, fn_dir / img_path.name) # 將原始影像複製到 FN 資料夾
-            
-            elif not prediction_made and not has_ground_truth_oil:
-                # 情況四: 真陰性 (True Negative, TN)
-                # 模型沒有做出預測，且影像中確實也沒有油汙。這是模型正確的「忽略」行為。
-                shutil.copy(img_path, tn_dir / img_path.name) # 將原始影像複製到 TN 資料夾
+                cv2.imwrite(str(tp_dir / output_filename), annotated_image)
+            elif prediction_made and not has_ground_truth_object:
+                annotated_image = results[0].plot()
+                cv2.imwrite(str(fp_dir / output_filename), annotated_image)
+            elif not prediction_made and has_ground_truth_object:
+                shutil.copy(img_path, fn_dir / output_filename)
+            elif not prediction_made and not has_ground_truth_object:
+                tn_output_filename = f"{img_path.stem}_iou_1.0000{img_path.suffix}"
+                shutil.copy(img_path, tn_dir / tn_output_filename)
 
         print(f"  分類化的預測圖已成功儲存至: {output_base_dir}")
 
     except Exception as e:
         print(f"  [錯誤] 產生分類化預測圖時發生錯誤: {e}")
         import traceback; traceback.print_exc()
+
 
 def calculate_pixel_level_metrics(model, exp_config, imgsz):
     """
@@ -130,10 +129,10 @@ def calculate_pixel_level_metrics(model, exp_config, imgsz):
 
         # 遍歷所有測試圖片
         for img_path in tqdm(image_files, desc="Calculating Pixel Metrics at Original Scale"):
-            results = model.predict(source=str(img_path), verbose=False, imgsz=imgsz)
+            results = model.predict(source=str(img_path), verbose=False, imgsz=imgsz, conf=exp_config.get('eval_conf', 0.25))
             
             # 讀取真實的 .png 遮罩檔案
-            gt_label_path = test_label_dir / (img_path.stem + '.png');
+            gt_label_path = test_label_dir / (img_path.stem + '.png')
             if not gt_label_path.exists(): continue
             gt_mask_cv = cv2.imread(str(gt_label_path), cv2.IMREAD_GRAYSCALE)
             if gt_mask_cv is None: continue
@@ -142,7 +141,7 @@ def calculate_pixel_level_metrics(model, exp_config, imgsz):
             gt_mask_binary = (gt_mask_cv > 0).astype(np.uint8); h_orig, w_orig = gt_mask_binary.shape
             
             # 處理模型的預測遮罩
-            if results and results[0].masks:
+            if results and results[0] and results[0].masks is not None:
                 # 如果有預測遮罩，將所有遮罩合併為一個
                 pred_mask_small = torch.any(results[0].masks.data, dim=0).cpu().numpy().astype(np.uint8)
             else:
@@ -172,25 +171,23 @@ def calculate_pixel_level_metrics(model, exp_config, imgsz):
         return {}
 
 def evaluate_and_visualize(exp_config, data_yaml_path, model_path, results_path):
-    """
-    評估流程的主函式，它會協調所有評估相關的任務。
-
-    這是評估流程的總入口點。
-    """
     exp_name = exp_config.get('test_name') or exp_config['experiment_name']
     print(f"\n--- 開始評估: {exp_name} ---")
     
     try:
-        # 載入模型和設定
-        model = YOLO(model_path)
+        # --- 根據 architecture 參數選擇模型 ---
+        if exp_config.get('architecture') == 'deeplabv3+':
+            model = DeepLabAdapter(model_path)
+        else:
+            model = YOLO(model_path)
+            
         imgsz = exp_config.get('imgsz', 640)
         
         # --- 任務 1: 執行 YOLO 內建的標準評估 (model.val) ---
-        # 這會產生 mAP, Precision, Recall 等標準指標，並儲存 PR 曲線等圖表
         eval_charts_dir = results_path / "standard_evaluation_charts"
         print(f"  - 正在執行實例級評估 (model.val)，結果圖將儲存於: {eval_charts_dir}")
         metrics = model.val(data=str(data_yaml_path), split='test', project=str(results_path), name=eval_charts_dir.name, exist_ok=True, imgsz=imgsz, conf=exp_config.get('eval_conf', 0.25), iou=exp_config.get('eval_iou', 0.6))
-        
+
         # 將標準評估結果整理到一個字典中，以便後續記錄到 Excel
         eval_results = {}
         if hasattr(metrics, 'box') and metrics.box.map is not None:
@@ -216,10 +213,10 @@ def evaluate_and_visualize(exp_config, data_yaml_path, model_path, results_path)
             
             original_data_root = Path(recon_config['original_data_root']).resolve()
             vis_params = {
-                'min_conf': recon_config.get('overlay_min_conf', 0.25),
-                'nms_iou': recon_config.get('overlay_nms_iou', 0.6),
-                'alpha': recon_config.get('overlay_alpha', 0.2)
-            }
+                'min_conf': recon_config.get('overlay_min_conf', exp_config.get('eval_conf', 0.25)),
+                'nms_iou': recon_config.get('overlay_nms_iou', exp_config.get('eval_iou', 0.6)),
+                'alpha': recon_config.get('overlay_alpha', 0.2) # 0 表示不疊加原圖 
+            } 
             
             if patch_test_dir.is_dir() and original_data_root.is_dir():
                 recon_metrics = run_reconstruction_evaluation(

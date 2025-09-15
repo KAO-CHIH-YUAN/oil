@@ -13,13 +13,13 @@ Image.MAX_IMAGE_PIXELS = None
 
 # --- 來源與輸出設定 ---
 SOURCE_BASE_DIR = "/home/yuan/OIL_PROJECT/dataset/dataset_zenodo"
-OUTPUT_BASE_DIR = "/home/yuan/OIL_PROJECT/dataset/dataset_zenodo/zenodo_original_all_classes_patch_png"
-CATEGORIES = ["zenodo_original_all_classes"] # SAR_2 zenodo
+OUTPUT_BASE_DIR = "/home/yuan/OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_Patch"
+CATEGORIES = ["zenodo_vv_vh"] # SAR_2 zenodo
 SPLITS = ["train", "val", "test"]
 
 # --- Patching 參數設定 ---
-PATCH_SIZE = 640
-OVERLAP = 128
+PATCH_SIZE = 1024
+OVERLAP = 128 # 0 表示不重疊
 RANDOM_SEED = 42
 
 # --- 背景樣本保留比例設定 ---
