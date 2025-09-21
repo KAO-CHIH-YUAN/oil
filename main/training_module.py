@@ -45,7 +45,10 @@ def train_model(config, results_path):
             exist_ok=True,
             conf=config.get('eval_conf', 0.25),
             iou=config.get('eval_iou', 0.6),
-            cls=config.get('cls_weight', 0.5)
+            cls=config.get('cls_weight', 0.5),
+            lr0=config.get('lr0', None),
+            lrf=config.get('lrf', None),
+            mixup=config.get('mixup', 0.0) # default 0.0 (no mixup
         )
 
         training_time = time.time() - start_time

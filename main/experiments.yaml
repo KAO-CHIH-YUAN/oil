@@ -2641,41 +2641,529 @@ experiments:
   #         enabled: True
   #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh'
 
-  - experiment_name: 'Zenodo-3type(Oringal)_VV_resize_512'
+  # - experiment_name: 'Zenodo-3type(Oringal)_VV_resize_512_focal_loss'
+  #   mode: 'train' 
+  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv' 
+  #   epochs: 800
+  #   imgsz: 512
+  #   batch_size: 64
+  #   patience: 150
+  #   cls_weight: 0.5 
+  #   post_tests:
+  #     - test_name: 'zenodo' 
+  #       dataset: 
+  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv' 
+  #       reconstruction:
+  #         enabled: False
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv'
+
+
+  # - experiment_name: 'Zenodo-3type(Oringal)_VV_VH_resize_512_focal_loss'
+  #   mode: 'train' 
+  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh' 
+  #   epochs: 800
+  #   imgsz: 512
+  #   batch_size: 64
+  #   patience: 150
+  #   cls_weight: 0.5 
+  #   post_tests:
+  #     - test_name: 'zenodo' 
+  #       dataset: 
+  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh' 
+  #       reconstruction:
+  #         enabled: False
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh'
+
+
+  # - experiment_name: 'Zenodo-3type(Oringal)_VV_resplit-66-34_resize_512_focal_loss'
+  #   mode: 'train' 
+  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_resplit-66-34' 
+  #   epochs: 1000
+  #   imgsz: 512
+  #   batch_size: 128
+  #   patience: 150
+  #   cls_weight: 0.5 
+  #   post_tests:
+  #     - test_name: 'zenodo' 
+  #       dataset: 
+  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_resplit-66-34' 
+  #       reconstruction:
+  #         enabled: False
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_resplit-66-34'
+
+
+  # - experiment_name: 'Zenodo-3type(Oringal)_VV_VH_resplit-66-34_resize_512_focal_loss'
+  #   mode: 'train' 
+  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_resplit-66-34' 
+  #   epochs: 1000
+  #   imgsz: 512
+  #   batch_size: 128
+  #   patience: 150
+  #   cls_weight: 0.5 
+  #   post_tests:
+  #     - test_name: 'zenodo' 
+  #       dataset: 
+  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_resplit-66-34' 
+  #       reconstruction:
+  #         enabled: False
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_resplit-66-34'
+
+  # - experiment_name: 'Zenodo-3type(Oringal)_VV_VH_resplit-66-34_resize_512_focal_loss_learningrate_0.001_clsweight1_mixup0'
+  #   mode: 'train' 
+  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_resplit-66-34' 
+  #   epochs: 1000
+  #   imgsz: 512
+  #   batch_size: 128
+  #   patience: 400
+  #   cls_weight: 1 
+  #   lr0: 0.001 # learning rate
+  #   lrf: 0.01 # final learning rate = lr0 * lrf
+  #   mixup: 0 # MixUp 會將兩張圖片按比例混合，是一種非常強大的正規化手段，能有效提升模型的泛化能力。
+  #   post_tests:
+  #     - test_name: 'zenodo' 
+  #       dataset: 
+  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_resplit-66-34' 
+  #       reconstruction:
+  #         enabled: False
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_resplit-66-34'
+
+  # - experiment_name: 'Zenodo-3type(Oringal)_VV_VH_resplit-66-34_resize_512_focal_loss_learningrate_0.001_clsWeight1.5_mixup0.1'
+  #   mode: 'train' 
+  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_resplit-66-34' 
+  #   epochs: 1000
+  #   imgsz: 512
+  #   batch_size: 128
+  #   patience: 400
+  #   cls_weight: 1.5 
+  #   lr0: 0.001 
+  #   lrf: 0.01 
+  #   mixup: 0.1 
+  #   post_tests:
+  #     - test_name: 'zenodo' 
+  #       dataset: 
+  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_resplit-66-34' 
+  #       reconstruction:
+  #         enabled: False
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_resplit-66-34'
+
+  # - experiment_name: 'Zenodo-3type(Oringal)_VV_VH_resplit-66-34_resize_512_focal_loss_learningrate_0.001_clsweight1_mixup0.1'
+  #   mode: 'train' 
+  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_resplit-66-34' 
+  #   epochs: 1000
+  #   imgsz: 512
+  #   batch_size: 128
+  #   patience: 400
+  #   cls_weight: 1 
+  #   lr0: 0.001 
+  #   lrf: 0.01 
+  #   mixup: 0.1 
+  #   post_tests:
+  #     - test_name: 'zenodo' 
+  #       dataset: 
+  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_resplit-66-34' 
+  #       reconstruction:
+  #         enabled: False
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_resplit-66-34'
+
+  # - experiment_name: 'Zenodo-3type(Oringal)_VV_VH_resplit-66-34_resize_512_focal_loss_learningrate_0.001_clsweight1_mixup0.2'
+  #   mode: 'train' 
+  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_resplit-66-34' 
+  #   epochs: 1000
+  #   imgsz: 512
+  #   batch_size: 128
+  #   patience: 400
+  #   cls_weight: 1 
+  #   lr0: 0.001 
+  #   lrf: 0.01 
+  #   mixup: 0.2 
+  #   post_tests:
+  #     - test_name: 'zenodo' 
+  #       dataset: 
+  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_resplit-66-34' 
+  #       reconstruction:
+  #         enabled: False
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_resplit-66-34'
+
+  # - experiment_name: 'Zenodo-3type(Oringal)_VV_VH_resplit-66-34_resize_512_focal_loss_learningrate_0.001_clsweight1.5_mixup0.2'
+  #   mode: 'train' 
+  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_resplit-66-34' 
+  #   epochs: 1000
+  #   imgsz: 512
+  #   batch_size: 128
+  #   patience: 400
+  #   cls_weight: 1.5 
+  #   lr0: 0.001 
+  #   lrf: 0.01 
+  #   mixup: 0.2 
+  #   post_tests:
+  #     - test_name: 'zenodo' 
+  #       dataset: 
+  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_resplit-66-34' 
+  #       reconstruction:
+  #         enabled: False
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_resplit-66-34'
+
+
+  # - experiment_name: 'Zenodo-3type(Oringal)_VV_VH_resplit-66-34_resize_512_focal_loss_learningrate_0.001_clsweight1_mixup0.1'
+  #   mode: 'train' 
+  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_resplit-66-34' 
+  #   epochs: 200
+  #   imgsz: 512
+  #   batch_size: 128
+  #   patience: 100
+  #   cls_weight: 1 
+  #   lr0: 0.001 
+  #   lrf: 0.01 
+  #   mixup: 0.1 
+  #   post_tests:
+  #     - test_name: 'zenodo' 
+  #       dataset: 
+  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_resplit-66-34' 
+  #       reconstruction:
+  #         enabled: False
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_resplit-66-34'
+
+  # - experiment_name: 'Zenodo-3type(Oringal)_VV_VH_resplit-66-34_resize_512_focal_loss_learningrate_0.001_clsweight1.5_mixup0'
+  #   mode: 'train' 
+  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_resplit-66-34' 
+  #   epochs: 1000
+  #   imgsz: 512
+  #   batch_size: 128
+  #   patience: 400
+  #   cls_weight: 1.5 
+  #   lr0: 0.001 # learning rate
+  #   lrf: 0.01 # final learning rate = lr0 * lrf
+  #   mixup: 0 # MixUp 會將兩張圖片按比例混合，是一種非常強大的正規化手段，能有效提升模型的泛化能力。
+  #   post_tests:
+  #     - test_name: 'zenodo' 
+  #       dataset: 
+  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_resplit-66-34' 
+  #       reconstruction:
+  #         enabled: False
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_resplit-66-34'
+
+  # - experiment_name: 'Zenodo-3type(Oringal)_VV_VH_resplit-66-34_resize_512_focal_loss_learningrate_0.001_clsweight2_mixup0'
+  #   mode: 'train' 
+  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_resplit-66-34' 
+  #   epochs: 1000
+  #   imgsz: 512
+  #   batch_size: 128
+  #   patience: 400
+  #   cls_weight: 2
+  #   lr0: 0.001 # learning rate
+  #   lrf: 0.01 # final learning rate = lr0 * lrf
+  #   mixup: 0 # MixUp 會將兩張圖片按比例混合，是一種非常強大的正規化手段，能有效提升模型的泛化能力。
+  #   post_tests:
+  #     - test_name: 'zenodo' 
+  #       dataset: 
+  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_resplit-66-34' 
+  #       reconstruction:
+  #         enabled: False
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_resplit-66-34'
+
+  # - experiment_name: 'Zenodo-3type(Oringal)_VV_VH_resplit-66-34_resize_512_focal_loss_learningrate_0.001_clsweight2_mixup0'
+  #   mode: 'train' 
+  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_resplit-66-34' 
+  #   epochs: 1000
+  #   imgsz: 512
+  #   batch_size: 128
+  #   patience: 200
+  #   cls_weight: 2
+  #   lr0: 0.001 # learning rate
+  #   lrf: 0.01 # final learning rate = lr0 * lrf
+  #   mixup: 0 # MixUp 會將兩張圖片按比例混合，是一種非常強大的正規化手段，能有效提升模型的泛化能力。
+  #   post_tests:
+  #     - test_name: 'zenodo' 
+  #       dataset: 
+  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_resplit-66-34' 
+  #       reconstruction:
+  #         enabled: False
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_resplit-66-34'
+
+  # - experiment_name: 'Zenodo-3type(Oringal)_VV_VH_resplit-66-34_resize_512_focal_loss_learningrate_0.001_clsweight3_mixup0'
+  #   mode: 'train' 
+  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_resplit-66-34' 
+  #   epochs: 1000
+  #   imgsz: 512
+  #   batch_size: 128
+  #   patience: 200
+  #   cls_weight: 3
+  #   lr0: 0.001 # learning rate
+  #   lrf: 0.01 # final learning rate = lr0 * lrf
+  #   mixup: 0 # MixUp 會將兩張圖片按比例混合，是一種非常強大的正規化手段，能有效提升模型的泛化能力。
+  #   post_tests:
+  #     - test_name: 'zenodo' 
+  #       dataset: 
+  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_resplit-66-34' 
+  #       reconstruction:
+  #         enabled: False
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_resplit-66-34'
+
+  # - experiment_name: 'Zenodo-3type(Oringal)_VV_VH_resplit-66-34_resize_512_focal_loss_learningrate_0.001_clsweight5_mixup0'
+  #   mode: 'train' 
+  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_resplit-66-34' 
+  #   epochs: 1000
+  #   imgsz: 512
+  #   batch_size: 128
+  #   patience: 200
+  #   cls_weight: 5
+  #   lr0: 0.001 
+  #   lrf: 0.01 
+  #   mixup: 0 
+  #   post_tests:
+  #     - test_name: 'zenodo' 
+  #       dataset: 
+  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_resplit-66-34' 
+  #       reconstruction:
+  #         enabled: False
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_resplit-66-34'
+
+  # - experiment_name: 'Zenodo-3type(Oringal)_VV_VH_resplit-66-34_resize_512_focal_loss_learningrate_0.001_clsweight2_mixup0_degrees45'
+  #   mode: 'train' 
+  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_resplit-66-34' 
+  #   epochs: 1000
+  #   imgsz: 512
+  #   batch_size: 128
+  #   patience: 200
+  #   cls_weight: 2
+  #   lr0: 0.001 # learning rate
+  #   lrf: 0.01 # final learning rate = lr0 * lrf
+  #   mixup: 0 # MixUp 會將兩張圖片按比例混合，是一種非常強大的正規化手段，能有效提升模型的泛化能力。
+  #   degrees: 45
+  #   post_tests:
+  #     - test_name: 'zenodo' 
+  #       dataset: 
+  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_resplit-66-34' 
+  #       reconstruction:
+  #         enabled: False
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_resplit-66-34'
+
+  # - experiment_name: 'Zenodo-3type(Oringal)_VV_VH_resplit-66-34_resize_512_focal_loss_learningrate_0.001_clsweight3_mixup0_degrees45'
+  #   mode: 'train' 
+  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_resplit-66-34' 
+  #   epochs: 1000
+  #   imgsz: 512
+  #   batch_size: 128
+  #   patience: 200
+  #   cls_weight: 3
+  #   lr0: 0.001 # learning rate
+  #   lrf: 0.01 # final learning rate = lr0 * lrf
+  #   mixup: 0 # MixUp 會將兩張圖片按比例混合，是一種非常強大的正規化手段，能有效提升模型的泛化能力。
+  #   degrees: 45
+  #   post_tests:
+  #     - test_name: 'zenodo' 
+  #       dataset: 
+  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_resplit-66-34' 
+  #       reconstruction:
+  #         enabled: False
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_resplit-66-34'
+
+  # - experiment_name: 'Zenodo-3type(Oringal)_VV_VH_resplit-66-34_resize_512_focal_loss_learningrate_0.001_clsweight5_mixup0_degrees45'
+  #   mode: 'train' 
+  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_resplit-66-34' 
+  #   epochs: 1000
+  #   imgsz: 512
+  #   batch_size: 128
+  #   patience: 200
+  #   cls_weight: 5
+  #   lr0: 0.001 
+  #   lrf: 0.01 
+  #   mixup: 0 
+  #   degrees: 45
+  #   post_tests:
+  #     - test_name: 'zenodo' 
+  #       dataset: 
+  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_resplit-66-34' 
+  #       reconstruction:
+  #         enabled: False
+  #         original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_resplit-66-34'
+
+  # - experiment_name: 'Zenodo-3type(Oringal)_VV_VH_resplit-66-34_v2_resize_512_focal_loss_learningrate_0.001_clsweight2_mixup0'
+  #   mode: 'train' 
+  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_resplit-66-34_v2' 
+  #   epochs: 1000
+  #   imgsz: 512
+  #   batch_size: 128
+  #   patience: 200
+  #   cls_weight: 2
+  #   lr0: 0.001 
+  #   lrf: 0.01 
+  #   mixup: 0 
+  #   post_tests:
+  #     - test_name: 'zenodo' 
+  #       dataset: 
+  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_resplit-66-34_v2' 
+  #       reconstruction:
+  #         enabled: False
+  #         original_data_root: ''
+
+  # - experiment_name: 'Zenodo-3type(Oringal)_VV_VH_resplit-66-34_v2_resize_512_focal_loss_learningrate_0.001_clsweight3_mixup0'
+  #   mode: 'train' 
+  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_resplit-66-34_v2' 
+  #   epochs: 1000
+  #   imgsz: 512
+  #   batch_size: 128
+  #   patience: 200
+  #   cls_weight: 3
+  #   lr0: 0.001 # learning rate
+  #   lrf: 0.01 # final learning rate = lr0 * lrf
+  #   mixup: 0 # MixUp 會將兩張圖片按比例混合，是一種非常強大的正規化手段，能有效提升模型的泛化能力。
+  #   post_tests:
+  #     - test_name: 'zenodo' 
+  #       dataset: 
+  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_resplit-66-34_v2' 
+  #       reconstruction:
+  #         enabled: False
+  #         original_data_root: ''
+
+  # - experiment_name: 'Zenodo-3type(Oringal)_VV_VH_resplit-66-34_v2_resize_512_focal_loss_learningrate_0.001_clsweight5_mixup0'
+  #   mode: 'train' 
+  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_resplit-66-34_v2' 
+  #   epochs: 1000
+  #   imgsz: 512
+  #   batch_size: 128
+  #   patience: 200
+  #   cls_weight: 5
+  #   lr0: 0.001 # learning rate
+  #   lrf: 0.01 # final learning rate = lr0 * lrf
+  #   mixup: 0 # MixUp 會將兩張圖片按比例混合，是一種非常強大的正規化手段，能有效提升模型的泛化能力。
+  #   post_tests:
+  #     - test_name: 'zenodo' 
+  #       dataset: 
+  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_resplit-66-34_v2' 
+  #       reconstruction:
+  #         enabled: False
+  #         original_data_root: ''
+
+  # - experiment_name: 'Zenodo-3type(Oringal)_VV_VH_resplit-66-34_v2_resize_512_focal_loss_learningrate_0.001_clsweight2_mixup0_degrees45'
+  #   mode: 'train' 
+  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_resplit-66-34_v2' 
+  #   epochs: 1000
+  #   imgsz: 512
+  #   batch_size: 128
+  #   patience: 200
+  #   cls_weight: 2
+  #   lr0: 0.001 
+  #   lrf: 0.01 
+  #   mixup: 0 
+  #   degrees: 45
+  #   post_tests:
+  #     - test_name: 'zenodo' 
+  #       dataset: 
+  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_resplit-66-34_v2' 
+  #       reconstruction:
+  #         enabled: False
+  #         original_data_root: ''
+
+  # - experiment_name: 'Zenodo-3type(Oringal)_VV_VH_resplit-66-34_v2_resize_512_focal_loss_learningrate_0.001_clsweight3_mixup0_degrees45'
+  #   mode: 'train' 
+  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_resplit-66-34_v2' 
+  #   epochs: 1000
+  #   imgsz: 512
+  #   batch_size: 128
+  #   patience: 200
+  #   cls_weight: 3
+  #   lr0: 0.001 # learning rate
+  #   lrf: 0.01 # final learning rate = lr0 * lrf
+  #   mixup: 0 # MixUp 會將兩張圖片按比例混合，是一種非常強大的正規化手段，能有效提升模型的泛化能力。
+  #   degrees: 45
+  #   post_tests:
+  #     - test_name: 'zenodo' 
+  #       dataset: 
+  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_resplit-66-34_v2' 
+  #       reconstruction:
+  #         enabled: False
+  #         original_data_root: ''
+
+  # - experiment_name: 'Zenodo-3type(Oringal)_VV_VH_resplit-66-34_v2_resize_512_focal_loss_learningrate_0.001_clsweight5_mixup0_degrees45'
+  #   mode: 'train' 
+  #   base_model: 'OIL_PROJECT/code/main/yolo11n-seg.pt' 
+  #   dataset:
+  #     path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_resplit-66-34_v2' 
+  #   epochs: 1000
+  #   imgsz: 512
+  #   batch_size: 128
+  #   patience: 200
+  #   cls_weight: 5
+  #   lr0: 0.001 # learning rate
+  #   lrf: 0.01 # final learning rate = lr0 * lrf
+  #   mixup: 0 # MixUp 會將兩張圖片按比例混合，是一種非常強大的正規化手段，能有效提升模型的泛化能力。
+  #   degrees: 45
+  #   post_tests:
+  #     - test_name: 'zenodo' 
+  #       dataset: 
+  #         path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_resplit-66-34_v2' 
+  #       reconstruction:
+  #         enabled: False
+  #         original_data_root: ''
+
+
+
+  - experiment_name: 'Zenodo-3type(Oringal)_VV_VH_resplit-66-34_resize_512_focal_loss_learningrate_0.001_clsweight5_mixup0_degrees45_noPretrained'
     mode: 'test' 
-    base_model: '/home/yuan/OIL_PROJECT/result_zenodo_vv_vh/20250911-042352_Zenodo-3type(Oringal)_VV_resize_512/weights/best.pt' 
+    base_model: '/home/yuan/OIL_PROJECT/result_zenodo_vv_vh/20250921-215701_Zenodo-3type(Oringal)_VV_VH_resplit-66-34_resize_512_focal_loss_learningrate_0.001_clsweight5_mixup0_degrees45_noPretrained/weights/best.pt' # 'OIL_PROJECT/yuan_oil_env/lib/python3.13/site-packages/ultralytics/cfg/models/11/yolo11-seg.yaml' 
     dataset:
-      path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv' 
-    epochs: 800
+      path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_resplit-66-34' 
+    epochs: 1000
     imgsz: 512
-    batch_size: 64
-    patience: 150
-    cls_weight: 0.5 
+    batch_size: 128
+    patience: 200
+    cls_weight: 5
+    lr0: 0.001 
+    lrf: 0.01 
+    mixup: 0 
+    degrees: 45
+    eval_conf: 0.25
     post_tests:
       - test_name: 'zenodo' 
         dataset: 
-          path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv' 
+          path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_resplit-66-34' 
         reconstruction:
           enabled: False
-          original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv'
-
-
-  - experiment_name: 'Zenodo-3type(Oringal)_VV_VH_resize_512'
-    mode: 'test' 
-    base_model: '/home/yuan/OIL_PROJECT/result_zenodo_vv_vh/20250911-073800_Zenodo-3type(Oringal)_VV_VH_resize_512/weights/best.pt' 
-    dataset:
-      path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh' 
-    epochs: 800
-    imgsz: 512
-    batch_size: 64
-    patience: 150
-    cls_weight: 0.5 
-    post_tests:
-      - test_name: 'zenodo' 
-        dataset: 
-          path: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh' 
-        reconstruction:
-          enabled: False
-          original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh'
-
-
+          original_data_root: 'OIL_PROJECT/dataset/dataset_zenodo/zenodo_vv_vh_resplit-66-34'
