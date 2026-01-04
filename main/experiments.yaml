@@ -1,0 +1,109 @@
+# 實驗結果儲存的根目錄
+results_base_dir: '/home/yuan/Yuan/OIL_Project_12_7/result/model/TestNew'
+# Excel 記錄檔的路徑 
+excel_log_path: '/home/yuan/Yuan/OIL_Project_12_7/result/excel_log/Test.xlsx' 
+
+# 要執行的實驗列表
+experiments:
+  - experiment_name: 'Test_Segformer_2048_transferPaperRGB'
+    mode: 'test'
+    architecture: 'segformer_aux'
+    architecture_cfg:
+      aux_loss_weight: 0.6
+      in_channels: 3 # 1
+      hf_model_name: 'nvidia/segformer-b5-finetuned-ade-640-640'
+      aux_in_channels: 320
+    cross_validation:
+      enabled: True       
+      k_folds: 3          
+      random_state: 42    
+    base_model: '/home/yuan/Yuan/OIL_Project_12_7/result/model/DV4_small_transferPaperRGB_CV/20251222-031355_DeepLab_2048to512_transferPaperRGB/fold_1/weights/best.pt' 
+    dataset:
+      path: '/home/yuan/Yuan/OIL_Project_12_7/dataset/DV4_SAR_All_v3_relabel_TransferPaperRGB_Fix_Patch/HNM_P2048_TrainO512_TestO512_resize512/hnm_hybrid_ratio_1_1.5'
+    imgsz: 512
+    train:
+      epochs: 800
+      # loss_function: 'bce_dice'
+      imgsz: 512
+      batch_size: 12
+      workers: 4
+      patience:  50
+      lr0: 0.0001      
+      amp: True        
+      degrees: 20
+      translate: 0.1
+      scale: 0
+      fliplr: 0.5
+      flipud: 0.5
+      gradient_accumulation_steps: 4
+    post_tests:
+      - test_name: 'DV4_2048_transferPaperRGB'
+        dataset:
+          path: '/home/yuan/Yuan/OIL_Project_12_7/dataset/DV4_SAR_All_v3_relabel_TransferPaperRGB_Fix_Patch/HNM_P2048_TrainO512_TestO512_resize512/hnm_hybrid_ratio_1_1.5'
+        reconstruction:
+          enabled: true
+          original_data_root: '/home/yuan/Yuan/OIL_Project_12_7/dataset/DV4_SAR_All_v3_relabel_TransferPaperRGB_Fix'
+          original_patch_size: 2048
+        evaluation_on_original: 
+          enabled: true  
+          original_data_root: '/home/yuan/Yuan/OIL_Project_12_7/dataset/DV4_SAR_All_v3_relabel_TransferPaperRGB_Fix_Patch/P2048_TrainO512_TestO512_BG100'
+        draw_bounding_boxes: false
+        grad_cam:
+          enabled: True         
+          saliency_map: True    # 是否要產生 CH0, CH1, CH2 的熱力圖
+          tsne_analysis: True   # [New] 是否要執行 t-SNE 特徵分析
+          pca_analysis: True    # [New] 是否要執行 PCA 特徵分析
+          feature_map_analysis: True # [New] 是否要執行特徵圖可視化
+          channel_importance: True # [New] 是否要執行通道重要性分析
+          rgb_error_analysis: True
+
+
+  # - experiment_name: 'rs3mamba_2048_transferPaperRGB_dice_bce'
+  #   mode: 'train'
+  #   architecture: 'rs3mamba'
+  #   architecture_cfg:
+  #     in_channels: 3                                     # 支援單通道 SAR
+  #     pretrained_vmamba: 'weights/vmamba_tiny_e292.pth'  # 預訓練權重路徑
+  #   cross_validation:
+  #     enabled: True       
+  #     k_folds: 3          
+  #     random_state: 42    
+  #   base_model: '' 
+  #   dataset:
+  #     path: '/home/yuan/Yuan/OIL_Project_12_7/dataset/DV4_SAR_Small_v3_relabel_TransferPaperRGB_Fix_Patch/HNM_P2048_TrainO512_TestO512_BG100/hnm_hybrid_ratio_1_1.5'
+  #   imgsz: 512
+  #   train:
+  #     epochs: 800
+  #     imgsz: 512
+  #     loss_function: 'bce_dice'
+  #     batch_size: 12
+  #     workers: 4
+  #     patience:  100
+  #     lr0: 0.0001      
+  #     amp: True        
+  #     degrees: 20
+  #     translate: 0.1
+  #     scale: 0
+  #     fliplr: 0.5
+  #     flipud: 0.5
+  #     gradient_accumulation_steps: 4
+  #   post_tests:
+  #     - test_name: 'DV4_2048_transferPaperRGB'
+  #       dataset:
+  #         path: '/home/yuan/Yuan/OIL_Project_12_7/dataset/DV4_SAR_Small_v3_relabel_TransferPaperRGB_Fix_Patch/HNM_P2048_TrainO512_TestO512_BG100/hnm_hybrid_ratio_1_1.5'
+  #       reconstruction:
+  #         enabled: true
+  #         original_data_root: '/home/yuan/Yuan/OIL_Project_12_7/dataset/DV4_SAR_Small_v3_relabel_TransferPaperRGB_Fix'
+  #         original_patch_size: 2048
+  #       evaluation_on_original: 
+  #         enabled: true  
+  #         original_data_root: '/home/yuan/Yuan/OIL_Project_12_7/dataset/DV4_SAR_Small_v3_relabel_TransferPaperRGB_Fix_Patch/P2048_TrainO512_TestO512_BG100'
+  #       draw_bounding_boxes: false
+  #       grad_cam:
+  #         enabled: True         
+  #         saliency_map: True    # 是否要產生 CH0, CH1, CH2 的熱力圖
+  #         tsne_analysis: True   # [New] 是否要執行 t-SNE 特徵分析
+  #         pca_analysis: True    # [New] 是否要執行 PCA 特徵分析
+  #         feature_map_analysis: True # [New] 是否要執行特徵圖可視化
+  #         channel_importance: True # [New] 是否要執行通道重要性分析
+
